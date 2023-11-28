@@ -1,0 +1,18 @@
+.p-button {
+  padding: 5px 10px;
+}
+
+
+.p-card {
+  padding: 10px;
+
+}
+.p-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  text-align: center;
+}
