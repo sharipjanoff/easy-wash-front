@@ -48,6 +48,8 @@ const current = computed(() => {
 .list-page {
   width: 100%;
   height: 100%;
+  padding: 20px;
+  position: relative;
 
   .switcher {
     display: flex;
@@ -57,8 +59,8 @@ const current = computed(() => {
 
     position: absolute;
     z-index: 999;
-    top: 1%;
-    right: 2%;
+    top: 3%;
+    right: 3.5%;
 
     padding: 10px;
     background: rgba(240, 248, 255, 0.7);
