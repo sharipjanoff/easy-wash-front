@@ -1,5 +1,5 @@
 <template>
-  <header class="header">
+  <header class="header" v-if="!isMobile">
     <div class="header__left">
       <sidebar-component />
       <router-link class="link" to="/">EasyWash</router-link>
@@ -11,7 +11,12 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import SidebarComponent from '@/components/common/SidebarComponent.vue'
+
+const viewportWidth = window.innerWidth
+const isMobile = ref(viewportWidth < 650)
+console.log(isMobile)
 </script>
 
 <style scoped lang="scss">
@@ -28,11 +33,14 @@ import SidebarComponent from '@/components/common/SidebarComponent.vue'
     justify-content: space-evenly;
     align-items: center;
   }
+
   &__left {
-    width: 30%;
+    gap: 20px;
+    margin-left: 20px;
   }
+
   &__right {
-    width: 10%;
+    margin-right: 20px;
   }
 }
 </style>

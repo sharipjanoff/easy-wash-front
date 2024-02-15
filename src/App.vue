@@ -1,12 +1,12 @@
 <template>
   <header-component />
   <router-view />
-  <sidebar-component />
+  <footer-component />
 </template>
 
 <script setup>
 import HeaderComponent from '@/components/common/HeaderComponent.vue'
-import SidebarComponent from '@/components/common/SidebarComponent.vue'
+import FooterComponent from '@/components/common/FooterComponent.vue'
 </script>
 
 <style scoped>

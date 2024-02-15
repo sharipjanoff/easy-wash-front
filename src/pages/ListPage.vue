@@ -67,4 +67,11 @@ const current = computed(() => {
     border-radius: 20px;
   }
 }
+
+@media screen and (max-width: 650px) {
+  .list-page {
+    padding: 0;
+    width: 100vw;
+  }
+}
 </style>

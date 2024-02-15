@@ -1,21 +1,35 @@
 <template>
   <div class="login-page">
     <form class="login-form">
-      <div class="registration-form__item">
-        <label for="email">email</label>
-        <input-text type="text" v-model="userData.email" id="email" />
+      <div class="login-form__item">
+        <input-float
+          id="email"
+          label="Email"
+          v-model="userData.email"
+        ></input-float>
       </div>
-      <div class="registration-form__item">
-        <label for="password">password</label>
-        <input-text type="text" v-model="userData.password" id="password" />
+      <div class="login-form__item">
+        <input-float
+          id="password"
+          label="Password"
+          v-model="userData.password"
+        ></input-float>
       </div>
-      <p-button @click="login">Send</p-button>
+      <div>
+        Don't have a profile yet?
+        <span
+          ><router-link to="/registration"
+            >Create and account</router-link
+          ></span
+        >
+      </div>
+      <p-button @click="login">Sign In</p-button>
     </form>
   </div>
 </template>
 
 <script setup>
-import InputText from 'primevue/inputtext'
+import InputFloat from '@/components/common/InputFloat.vue'
 import PButton from 'primevue/button'
 import { reactive } from 'vue'
 import router from '../plugins/router'
@@ -36,16 +50,14 @@ const login = () => {
 .login-page {
   width: 100vw;
   height: 100vh;
+  padding-top: 25px;
 
   .login-form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 5px;
-    .login-form__input {
-      width: 300px;
-    }
+    gap: 21px;
   }
 }
 </style>

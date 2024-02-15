@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import 'primevue/resources/themes/saga-green/theme.css'
+import 'primevue/resources/themes/lara-light-blue/theme.css'
 import 'primeicons/primeicons.css'
 import '@/assets/css/primevue.scss'
 import '@/assets/css/main.css'

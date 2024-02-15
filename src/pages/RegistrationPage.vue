@@ -2,36 +2,49 @@
   <div class="registration-page">
     <form class="registration-form">
       <div class="registration-form__item">
-        <label for="email">email</label>
-        <input-text type="text" v-model="userData.email" id="email" />
+        <input-float v-model="userData.email" id="email" label="Email" />
       </div>
       <div class="registration-form__item">
-        <label for="firstName">first-name</label>
-        <input-text type="text" v-model="userData.firstName" id="firstName" />
-      </div>
-      <div class="registration-form__item">
-        <label for="lastName">lastname</label>
-        <input-text type="text" v-model="userData.lastName" id="lastName" />
-      </div>
-      <div class="registration-form__item">
-        <label for="password">password</label>
-        <input-text type="text" v-model="userData.password" id="password" />
-      </div>
-      <div class="registration-form__item">
-        <label for="passwordConfirm">password-confirm</label>
-        <input-text
-          type="text"
-          v-model="userData.passwordConfirm"
-          id="passwordConfirm"
+        <input-float
+          v-model="userData.firstName"
+          id="firstName"
+          label="First Name"
         />
       </div>
-      <p-button @click="register">Send</p-button>
+      <div class="registration-form__item">
+        <input-float
+          v-model="userData.lastName"
+          id="lastName"
+          label="Last Name"
+        />
+      </div>
+      <div class="registration-form__item">
+        <input-float
+          v-model="userData.password"
+          id="password"
+          label="Password"
+          type="password"
+        />
+      </div>
+      <div class="registration-form__item">
+        <input-float
+          v-model="userData.passwordConfirm"
+          id="passwordConfirm"
+          label="Confirm password"
+          type="password"
+        />
+      </div>
+      <div>
+        Already have a profile?
+        <span><router-link to="/login">Login!</router-link></span>
+      </div>
+      <p-button @click="register">Sign Up</p-button>
     </form>
   </div>
 </template>
 
 <script setup>
-import InputText from 'primevue/inputtext'
+import InputFloat from '@/components/common/InputFloat.vue'
 import PButton from 'primevue/button'
 import { reactive } from 'vue'
 import router from '../plugins/router'
@@ -55,13 +68,14 @@ const register = () => {
 .registration-page {
   width: 100vw;
   height: 100vh;
+  padding-top: 25px;
 
   .registration-form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 5px;
+    gap: 21px;
     .registration-form__input {
       width: 300px;
     }

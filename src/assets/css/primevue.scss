@@ -1,11 +1,18 @@
-.p-button {
-  padding: 5px 10px;
+:root {
+  --primary-color: #146CCF !important;
+  --primary-color-light: rgba(20, 108, 207, 0.9) !important;
 }
 
-
+.p-button {
+  padding: 5px 10px;
+  background: var(--primary-color);
+  border: var(--primary-color);
+}
+.p-button:hover {
+  background: var(--primary-color-light);
+}
 .p-card {
   padding: 10px;
-
 }
 .p-card-body {
   display: flex;
@@ -15,4 +22,11 @@
   gap: 10px;
 
   text-align: center;
+}
+.p-inputtext {
+  height: 30px;
+  padding: 10px;
+}
+.p-float-label label {
+  margin-top: -0.5rem !important;
 }
