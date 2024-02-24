@@ -1,30 +1,20 @@
 <template>
   <footer className="footer" v-if="isMobile">
-    <div class="footer__item">
-      <router-link to="/">
-        <i class="pi pi-home" style="font-size: 1.5rem"></i>
-      </router-link>
-    </div>
-    <div class="footer__item">
-      <router-link to="/">
-        <i class="pi pi-search" style="font-size: 1.5rem"></i>
-      </router-link>
-    </div>
-    <div class="footer__item">
-      <router-link to="/">
-        <i class="pi pi-map-marker" style="font-size: 1.5rem"></i>
-      </router-link>
-    </div>
-    <div class="footer__item">
-      <router-link to="/">
-        <i class="pi pi-check-square" style="font-size: 1.5rem"></i>
-      </router-link>
-    </div>
-    <div class="footer__item">
-      <router-link to="/">
-        <i class="pi pi-user" style="font-size: 1.5rem"></i>
-      </router-link>
-    </div>
+    <router-link class="footer__item" to="/">
+      <i class="pi pi-home" style="font-size: 1.5rem"></i>
+    </router-link>
+    <router-link class="footer__item" to="/schedule">
+      <i class="pi pi-search" style="font-size: 1.5rem"></i>
+    </router-link>
+    <router-link class="footer__item" to="/list">
+      <i class="pi pi-map-marker" style="font-size: 1.5rem"></i>
+    </router-link>
+    <router-link class="footer__item" to="/favorite">
+      <i class="pi pi-heart" style="font-size: 1.5rem"></i>
+    </router-link>
+    <router-link class="footer__item" to="/profile">
+      <i class="pi pi-user" style="font-size: 1.5rem"></i>
+    </router-link>
   </footer>
 </template>
 
@@ -34,16 +24,16 @@ import SidebarComponent from '@/components/common/SidebarComponent.vue'
 
 const viewportWidth = window.innerWidth
 const isMobile = ref(viewportWidth < 650)
-console.log(isMobile.value)
 </script>
 
 <style scoped lang="scss">
 .footer {
   display: flex;
   justify-content: space-evenly;
-  min-height: 50px;
+  height: 50px;
   width: 100%;
-  background: aliceblue;
+  background: #ede9e9;
+
   position: fixed;
   bottom: 0;
   left: 0;
@@ -55,9 +45,20 @@ console.log(isMobile.value)
     justify-content: center;
     align-items: center;
 
+    text-decoration: none;
+    color: #a8a4a4;
+
     i {
       width: 100%;
     }
+  }
+
+  &__item.router-link-active.router-link-exact-active {
+    color: var(--primary-color);
+  }
+
+  &__item:visited {
+    color: #a8a4a4;
   }
 }
 </style>

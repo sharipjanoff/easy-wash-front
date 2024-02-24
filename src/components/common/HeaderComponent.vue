@@ -16,7 +16,6 @@ import SidebarComponent from '@/components/common/SidebarComponent.vue'
 
 const viewportWidth = window.innerWidth
 const isMobile = ref(viewportWidth < 650)
-console.log(isMobile)
 </script>
 
 <style scoped lang="scss">

@@ -8,15 +8,3 @@
 import HeaderComponent from '@/components/common/HeaderComponent.vue'
 import FooterComponent from '@/components/common/FooterComponent.vue'
 </script>
-
-<style scoped>
-#app {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-.main {
-  padding-top: 10px;
-}
-</style>
