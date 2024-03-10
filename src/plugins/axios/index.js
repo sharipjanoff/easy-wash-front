@@ -1,7 +1,7 @@
 import axios from 'axios'
-import config from '@/utils/config'
 
-const BACKEND_URL = config('ENV_BACKEND_URL')
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+console.log(BACKEND_URL)
 
 export const instance = axios.create({
   withCredentials: true,

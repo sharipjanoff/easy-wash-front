@@ -8,26 +8,9 @@
           style="font-size: 1.5rem; color: var(--primary-color)"
         ></i>
       </p-button>
-      <!--      <input-icon icon="search" />-->
     </div>
-    <!--    <div class="home-page__item">-->
-    <!--      <carousel-->
-    <!--        :value="items"-->
-    <!--        :num-visible="3"-->
-    <!--        :num-scroll="3"-->
-    <!--        :responsive-options="responsiveOptions"-->
-    <!--      >-->
-    <!--        <template #item="slotProps">-->
-    <!--          <card-component-->
-    <!--            card-type="ad"-->
-    <!--            :item="slotProps.data"-->
-    <!--            :id="slotProps.index"-->
-    <!--          />-->
-    <!--        </template>-->
-    <!--      </carousel>-->
-    <!--    </div>-->
     <div class="home-page__item">
-      <h2>Автомойки</h2>
+      <h2>СТО</h2>
       <carousel
         :value="items"
         :num-visible="3"
@@ -35,16 +18,27 @@
         :responsive-options="responsiveOptions"
       >
         <template #item="slotProps">
-          <card-component
-            card-type="cw"
-            :item="slotProps.data"
-            :id="slotProps.index"
-          />
+          <div class="carousel-item">
+            <img
+              class="carousel-item__image"
+              :src="slotProps.data.image"
+              alt="Carwash Image"
+            />
+            <div class="carousel-item__name">
+              {{ slotProps.data.name }}
+            </div>
+            <div class="carousel-item__address">
+              {{ slotProps.data.address }}
+            </div>
+            <div class="carousel-item__phone">
+              {{ slotProps.data.phone }}
+            </div>
+          </div>
         </template>
       </carousel>
     </div>
     <div class="home-page__item">
-      <h2>СТО</h2>
+      <h2>Автомойки</h2>
       <carousel
         :value="items2"
         :num-visible="3"
@@ -52,11 +46,22 @@
         :responsive-options="responsiveOptions"
       >
         <template #item="slotProps">
-          <card-component
-            card-type="mn"
-            :item="slotProps.data"
-            :id="slotProps.index"
-          />
+          <div class="carousel-item">
+            <img
+              class="carousel-item__image"
+              :src="slotProps.data.image"
+              alt="Carwash Image"
+            />
+            <div class="carousel-item__name">
+              {{ slotProps.data.name }}
+            </div>
+            <div class="carousel-item__address">
+              {{ slotProps.data.address }}
+            </div>
+            <div class="carousel-item__phone">
+              {{ slotProps.data.phone }}
+            </div>
+          </div>
         </template>
       </carousel>
     </div>
@@ -64,18 +69,16 @@
 </template>
 
 <script setup>
-import Carousel from 'primevue/carousel'
-import PButton from 'primevue/button'
 import { ref } from 'vue'
-import CardComponent from '@/components/home/CardComponent.vue'
+import PButton from 'primevue/button'
+import Carousel from 'primevue/carousel'
 import carwashImage from '@/assets/images/carwash.webp'
 import maintenance from '@/assets/images/maintenance.webp'
-import InputIcon from '@/components/common/InputIcon.vue'
 
 const responsiveOptions = ref([
   {
     breakpoint: '1400px',
-    numVisible: 2,
+    numVisible: 5,
     numScroll: 1,
   },
   {
@@ -89,7 +92,7 @@ const responsiveOptions = ref([
     numScroll: 1,
   },
   {
-    breakpoint: '475px',
+    breakpoint: '575px',
     numVisible: 1,
     numScroll: 1,
   },
@@ -99,25 +102,55 @@ const items = [
     image: carwashImage,
     name: 'First',
     address: 'Sometthin St.',
-    number: '123123',
+    phone: '123123',
   },
   {
     image: carwashImage,
     name: 'Second',
     address: 'Sometthin St.',
-    number: '123123',
+    phone: '123123',
   },
   {
     image: carwashImage,
     name: 'Third',
     address: 'Sometthin St.',
-    number: '123123',
+    phone: '123123',
   },
   {
     image: carwashImage,
     name: 'Fourth',
     address: 'Sometthin St.',
-    number: '123123',
+    phone: '123123',
+  },
+  {
+    image: carwashImage,
+    name: 'Fifth',
+    address: 'Sometthin St.',
+    phone: '123123',
+  },
+  {
+    image: carwashImage,
+    name: 'Sixth',
+    address: 'Sometthin St.',
+    phone: '123123',
+  },
+  {
+    image: carwashImage,
+    name: 'Seventh',
+    address: 'Sometthin St.',
+    phone: '123123',
+  },
+  {
+    image: carwashImage,
+    name: 'Eighth',
+    address: 'Sometthin St.',
+    phone: '123123',
+  },
+  {
+    image: carwashImage,
+    name: 'Ninth',
+    address: 'Sometthin St.',
+    phone: '123123',
   },
 ]
 const items2 = [
@@ -125,25 +158,55 @@ const items2 = [
     image: maintenance,
     name: 'First',
     address: 'Sometthin St.',
-    number: '123123',
+    phone: '123123',
   },
   {
     image: maintenance,
     name: 'Second',
     address: 'Sometthin St.',
-    number: '123123',
+    phone: '123123',
   },
   {
     image: maintenance,
     name: 'Third',
     address: 'Sometthin St.',
-    number: '123123',
+    phone: '123123',
   },
   {
     image: maintenance,
     name: 'Fourth',
     address: 'Sometthin St.',
-    number: '123123',
+    phone: '123123',
+  },
+  {
+    image: maintenance,
+    name: 'Fifth',
+    address: 'Sometthin St.',
+    phone: '123123',
+  },
+  {
+    image: maintenance,
+    name: 'Sixth',
+    address: 'Sometthin St.',
+    phone: '123123',
+  },
+  {
+    image: maintenance,
+    name: 'Seventh',
+    address: 'Sometthin St.',
+    phone: '123123',
+  },
+  {
+    image: maintenance,
+    name: 'Eighth',
+    address: 'Sometthin St.',
+    phone: '123123',
+  },
+  {
+    image: maintenance,
+    name: 'Ninth',
+    address: 'Sometthin St.',
+    phone: '123123',
   },
 ]
 </script>
@@ -155,7 +218,7 @@ const items2 = [
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 25px 25px;
+  padding: 25px 25px 70px 25px;
 
   .page-header {
     width: 100%;
@@ -177,6 +240,25 @@ const items2 = [
   }
 
   &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .carousel-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &__image {
+      width: 150px;
+      height: 150px;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
   }
 }
 </style>

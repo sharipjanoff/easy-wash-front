@@ -1,21 +1,12 @@
 <template>
   <div class="list-page">
-    <div class="switcher">
-      <div class="switcher__option">Map</div>
-      <input-switch v-model="checked" />
-      <div class="switcher__option">List</div>
-    </div>
-    <component :is="current" :data="data"></component>
+    <map-component :data="data" />
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import InputSwitch from 'primevue/inputswitch'
 import MapComponent from '@/components/list/MapComponent.vue'
-import ListComponent from '@/components/list/ListComponent.vue'
 
-const checked = ref(false)
 const data = [
   {
     name: 'Moika 1',
@@ -39,9 +30,6 @@ const data = [
     coordinates: [43.25654, 76.92848],
   },
 ]
-const current = computed(() => {
-  return checked.value ? ListComponent : MapComponent
-})
 </script>
 
 <style scoped lang="scss">

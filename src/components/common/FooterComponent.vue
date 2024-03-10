@@ -4,7 +4,7 @@
       <i class="pi pi-home" style="font-size: 1.5rem"></i>
     </router-link>
     <router-link class="footer__item" to="/schedule">
-      <i class="pi pi-search" style="font-size: 1.5rem"></i>
+      <i class="pi pi-calendar" style="font-size: 1.5rem"></i>
     </router-link>
     <router-link class="footer__item" to="/list">
       <i class="pi pi-map-marker" style="font-size: 1.5rem"></i>
@@ -30,7 +30,7 @@ const isMobile = ref(viewportWidth < 650)
 .footer {
   display: flex;
   justify-content: space-evenly;
-  height: 50px;
+  height: 70px;
   width: 100%;
   background: #ede9e9;
 

@@ -1,6 +1,7 @@
 <template>
   <div class="login-page">
     <form class="login-form">
+      <h1>Вход</h1>
       <div class="login-form__item">
         <input-float
           id="email"
@@ -16,14 +17,10 @@
         ></input-float>
       </div>
       <div>
-        Don't have a profile yet?
-        <span
-          ><router-link to="/registration"
-            >Create and account</router-link
-          ></span
-        >
+        Еще нет аккаунта?
+        <span><router-link to="/registration">Создать!</router-link></span>
       </div>
-      <p-button @click="login">Sign In</p-button>
+      <p-button @click="login">Войти</p-button>
     </form>
   </div>
 </template>
@@ -50,7 +47,10 @@ const login = () => {
 .login-page {
   width: 100vw;
   height: 100vh;
-  padding-top: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   .login-form {
     display: flex;
