@@ -1,12 +1,30 @@
 <template>
   <div class="home-page">
-    <div class="page-header">
+    <div class="page-header" :class="{ 'page-header_column': showSearch }">
       <h1 class="page-header__title">Главная</h1>
-      <p-button class="page-header__button">
+      <div v-show="showSearch" class="search-input-container">
+        <input-text
+          type="text"
+          class="search-input"
+          placeholder="Поиск..."
+          v-model="searchQuery"
+          @keydown.enter="handleSearch"
+        />
+        <i
+          class="pi pi-search search-icon"
+          style="font-size: 1.5rem; color: var(--primary-color)"
+          @click="handleSearch"
+        />
+      </div>
+      <p-button
+        v-show="!showSearch"
+        class="page-header__button"
+        @click="showSearch = true"
+      >
         <i
           class="pi pi-search"
           style="font-size: 1.5rem; color: var(--primary-color)"
-        ></i>
+        />
       </p-button>
     </div>
     <div class="home-page__item">
@@ -71,10 +89,13 @@
 <script setup>
 import { ref } from 'vue'
 import PButton from 'primevue/button'
+import InputText from 'primevue/inputtext'
 import Carousel from 'primevue/carousel'
 import carwashImage from '@/assets/images/carwash.webp'
 import maintenance from '@/assets/images/maintenance.webp'
 
+const showSearch = ref(false)
+const searchQuery = ref('')
 const responsiveOptions = ref([
   {
     breakpoint: '1400px',
@@ -209,40 +230,80 @@ const items2 = [
     phone: '123123',
   },
 ]
+
+const handleSearch = () => {
+  console.log(searchQuery.value)
+}
 </script>
 
 <style scoped lang="scss">
 .home-page {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: calc(100vh - 50px);
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 25px 25px 70px 25px;
+  padding: 25px 25px 75px 25px;
+  background: #f7f8fa;
 
   .page-header {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    background: #fff;
+    position: relative;
+    transition: all 0.3s ease;
 
-    padding-bottom: 25px;
-
+    &.page-header_column {
+      flex-direction: column;
+    }
+    .search-input-container {
+      display: none;
+      opacity: 0;
+      transform: translateY(-20px) translateX(30px);
+      transition:
+        opacity 0.5s ease,
+        transform 0.5s ease; // Animate opacity and position
+      width: 100%;
+      height: 40px;
+      position: relative;
+      input.search-input {
+        width: 100%;
+        height: 100%;
+        padding: 10px 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .search-icon {
+        position: absolute;
+        top: 50%;
+        right: 1px;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+      }
+    }
     &__button {
+      transition: opacity 0.3s ease;
       display: flex;
       justify-content: center;
-
       width: 60px;
-
       background: none;
       border: 1px var(--primary-color) solid;
     }
+  }
+  .page-header_column {
+    flex-direction: column;
   }
 
   &__item {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    background: #fff;
   }
 
   .carousel-item {
@@ -260,5 +321,20 @@ const items2 = [
       }
     }
   }
+}
+
+// Use this outside of .home-page to apply when the condition is met
+.search-input-container {
+  display: block !important; // Override the display none when the container should be visible
+}
+
+// Adjust for when the search is active
+.home-page .page-header.page-header_column .search-input-container {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-header__buton {
+  opacity: 0;
 }
 </style>

@@ -9,9 +9,9 @@ const router = createRouter({
       component: () => import('@/pages/HomePage.vue'),
     },
     {
-      path: '/list',
+      path: '/map',
       name: 'List Page',
-      component: () => import('@/pages/ListPage.vue'),
+      component: () => import('@/pages/MapPage.vue'),
     },
     {
       path: '/favorite',
@@ -47,6 +47,11 @@ const router = createRouter({
       path: '/registration',
       name: 'Registration Page',
       component: () => import('@/pages/RegistrationPage.vue'),
+    },
+    {
+      path: '/reservation',
+      name: 'Reservation Page',
+      component: () => import('@/pages/ReservationPage.vue'),
     },
   ],
 })

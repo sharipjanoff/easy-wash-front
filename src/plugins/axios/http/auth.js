@@ -8,7 +8,24 @@ export const authService = {
       email: data.email,
       password: data.password,
       type: 'CLIENT',
+      phone: data.phone,
     }
-    return await instance.post('/users/registration', payload)
+    try {
+      return await instance.post('/users/registration', payload)
+    } catch (e) {
+      return e.response
+    }
+  },
+  signIn: async data => {
+    const payload = {
+      username: data.email,
+      password: data.password,
+      grant_type: 'password',
+    }
+    try {
+      return await instance.post('/uaa/oauth/token', payload)
+    } catch (e) {
+      return e.response
+    }
   },
 }

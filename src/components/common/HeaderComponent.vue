@@ -5,7 +5,7 @@
       <router-link class="logo" to="/">EasyWash</router-link>
     </div>
     <div class="header__right">
-      <p-button @click="handleClick()"> Login </p-button>
+      <p-button @click="handleClick()"> Войти </p-button>
     </div>
   </header>
 </template>
@@ -29,8 +29,7 @@ const handleClick = () => {
   justify-content: space-between;
   min-height: 50px;
   width: 100%;
-  background: #ffffff;
-  border-bottom: 2px var(--primary-color) solid;
+  background: #f7f8fa;
 
   &__left,
   &__right {
@@ -41,7 +40,7 @@ const handleClick = () => {
 
   &__left {
     gap: 20px;
-    margin-left: 20px;
+    margin-left: 25px;
 
     .logo {
       font-size: 26px;
@@ -55,7 +54,7 @@ const handleClick = () => {
   }
 
   &__right {
-    margin-right: 20px;
+    margin-right: 25px;
   }
 }
 </style>

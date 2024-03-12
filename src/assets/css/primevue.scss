@@ -32,3 +32,29 @@
 .p-float-label label {
   margin-top: -0.5rem !important;
 }
+.p-carousel-indicators {
+  display: none !important;
+}
+.p-accordion-header-link {
+  display: none
+}
+.p-tabview {
+  width: 100%;
+}
+.p-tabview-nav {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+  border: none;
+  width: 100%;
+  font-size: 20px;
+}
+.p-tabview-panel {
+  padding-top: 10px;
+  width: 100%;
+}
+.p-rating-icon {
+  width: 30px;
+  height: 30px;
+}

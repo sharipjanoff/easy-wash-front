@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import MapComponent from '@/components/list/MapComponent.vue'
+import MapComponent from '@/components/map/MapComponent.vue'
 
 const data = [
   {
@@ -14,6 +14,8 @@ const data = [
     address: 'Somethin street',
     number: '+77472281337',
     coordinates: [43.211673, 76.857594],
+    serviceType: 'Автомойка',
+    workTime: '9:00 - 21:00',
   },
   {
     name: 'Moika 2',
@@ -21,6 +23,8 @@ const data = [
     address: 'Somethin street',
     number: '+77472281488',
     coordinates: [43.213786, 76.880576],
+    serviceType: 'Автомойка',
+    workTime: '9:00 - 21:00',
   },
   {
     name: 'Moika 3',
@@ -28,33 +32,21 @@ const data = [
     address: 'Somethin street',
     number: '+77472281999',
     coordinates: [43.25654, 76.92848],
+    serviceType: 'Автомойка',
+    workTime: '9:00 - 21:00',
   },
 ]
 </script>
 
 <style scoped lang="scss">
 .list-page {
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  position: relative;
-
-  .switcher {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-
-    position: absolute;
-    z-index: 999;
-    top: 3%;
-    right: 3.5%;
-
-    padding: 10px;
-    background: rgba(240, 248, 255, 0.7);
-    border-radius: 20px;
-  }
+  width: 100vw;
+  height: calc(100vh - 50px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 25px 25px 75px 25px;
+  background: #f7f8fa;
 }
 
 @media screen and (max-width: 650px) {

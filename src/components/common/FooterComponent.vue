@@ -6,7 +6,7 @@
     <router-link class="footer__item" to="/schedule">
       <i class="pi pi-calendar" style="font-size: 1.5rem"></i>
     </router-link>
-    <router-link class="footer__item" to="/list">
+    <router-link class="footer__item" to="/map">
       <i class="pi pi-map-marker" style="font-size: 1.5rem"></i>
     </router-link>
     <router-link class="footer__item" to="/favorite">
@@ -32,7 +32,7 @@ const isMobile = ref(viewportWidth < 650)
   justify-content: space-evenly;
   height: 70px;
   width: 100%;
-  background: #ede9e9;
+  background: #fff;
 
   position: fixed;
   bottom: 0;

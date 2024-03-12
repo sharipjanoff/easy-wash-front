@@ -24,7 +24,7 @@
               <div class="station-info__item">Адрес: {{ item.address }}</div>
               <p-button
                 label="Оформить резервацию"
-                @click="openReservationDialog(item)"
+                @click="openReservationPage(item)"
               />
             </div>
           </l-popup>
@@ -36,6 +36,7 @@
 
 <script setup>
 import { reactive } from 'vue'
+import router from '@/plugins/router'
 import {
   LMap,
   LTileLayer,
@@ -46,6 +47,7 @@ import {
 import 'leaflet/dist/leaflet.css'
 import PButton from 'primevue/button'
 import pinIcon from '@/assets/icons/pin.png'
+import { useCurrentServiceStore } from '@/stores/currentService'
 
 const props = defineProps({
   data: {
@@ -54,13 +56,15 @@ const props = defineProps({
   },
 })
 
+const currentService = useCurrentServiceStore()
 const mapSettings = reactive({
   zoom: 13,
   center: [43.25654, 76.92848],
 })
 
-const openReservationDialog = info => {
-  console.log(info)
+const openReservationPage = info => {
+  currentService.data = info
+  router.push('/reservation')
 }
 const zoomInIcon = coordinates => {
   mapSettings.center = coordinates

@@ -25,7 +25,7 @@
             </div>
             <div class="list__item">
               <i class="pi pi-map-marker" style="font-size: 1.5rem"></i>
-              <router-link to="/list" class="link" @click="visible = !visible"
+              <router-link to="/map" class="link" @click="visible = !visible"
                 >Карта</router-link
               >
             </div>
@@ -88,6 +88,7 @@ const isAdmin = ref(false)
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  text-align: center;
   height: 100%;
   padding: 20px 0;
 }

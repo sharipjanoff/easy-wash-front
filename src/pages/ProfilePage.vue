@@ -79,29 +79,32 @@ const handleClick = () => {
 
 <style scoped lang="scss">
 .profile-page {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: calc(100vh - 50px);
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 10px;
-  padding: 25px 25px 70px 25px;
+  padding: 25px 25px 75px 25px;
+  background: #f7f8fa;
 
   .page-header {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-
-    padding-bottom: 25px;
+    padding: 20px;
+    border-radius: 10px;
+    background: #fff;
   }
 
   &__item {
-    width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
+    gap: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    background: #fff;
     .image-container {
       width: 200px;
       height: 200px;
@@ -127,10 +130,6 @@ const handleClick = () => {
       flex-direction: column;
       align-items: center;
       gap: 10px;
-
-      background: #f9fafb;
-      border-radius: 10px;
-      padding: 10px;
 
       &__item {
         width: 100%;

@@ -90,27 +90,30 @@ const reservations = reactive([
 
 <style scoped lang="scss">
 .schedule-page {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: calc(100vh - 50px);
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 25px 25px 70px 25px;
+  padding: 25px 25px 75px 25px;
+  background: #f7f8fa;
 
   .page-header {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-
-    padding-bottom: 25px;
+    padding: 20px;
+    border-radius: 10px;
+    background: #fff;
   }
 
   &__item {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 100%;
+    padding: 20px;
+    border-radius: 10px;
+    background: #fff;
   }
 }
 

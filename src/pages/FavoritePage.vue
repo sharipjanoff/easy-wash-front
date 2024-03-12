@@ -6,11 +6,7 @@
     <template v-else>
       <div class="favorite-page__item">
         <img :src="favoritesSvg" alt="Favorites Svg" />
-      </div>
-      <div class="favorite-page__item">
         <h3>В избранном пока ничего нет</h3>
-      </div>
-      <div class="favorite-page__item">
         <p>Выберите понравившийся автомойку и добавьте сюда</p>
       </div>
     </template>
@@ -26,22 +22,29 @@ const favoritesList = ref([])
 
 <style scoped lang="scss">
 .favorite-page {
+  width: 100vw;
+  height: calc(100vh - 50px);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  width: 100%;
-  height: 100%;
+  gap: 10px;
+  padding: 25px 25px 75px 25px;
+  background: #f7f8fa;
 
   &__item {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    background: #fff;
+
     h3 {
       weight: 600;
       font-size: 17px;
       line-height: 22px;
     }
-
     p {
       color: #989898;
       font-size: 16px;
