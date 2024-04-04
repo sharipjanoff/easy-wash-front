@@ -36,7 +36,7 @@
         :responsive-options="responsiveOptions"
       >
         <template #item="slotProps">
-          <div class="carousel-item">
+          <div class="carousel-item" @click="handleReservation(slotProps.data)">
             <img
               class="carousel-item__image"
               :src="slotProps.data.image"
@@ -64,7 +64,7 @@
         :responsive-options="responsiveOptions"
       >
         <template #item="slotProps">
-          <div class="carousel-item">
+          <div class="carousel-item" @click="handleReservation(slotProps.data)">
             <img
               class="carousel-item__image"
               :src="slotProps.data.image"
@@ -87,13 +87,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
+import router from '../plugins/router'
 import PButton from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import Carousel from 'primevue/carousel'
 import carwashImage from '@/assets/images/carwash.webp'
 import maintenance from '@/assets/images/maintenance.webp'
+import { useCurrentServiceStore } from '@/stores/currentService'
+import { useUserStore } from '@/stores/user'
+import { authService } from '@/plugins/axios/http/auth'
 
+const currentService = useCurrentServiceStore()
+const userStore = useUserStore()
 const showSearch = ref(false)
 const searchQuery = ref('')
 const responsiveOptions = ref([
@@ -121,116 +127,83 @@ const responsiveOptions = ref([
 const items = [
   {
     image: carwashImage,
-    name: 'First',
-    address: 'Sometthin St.',
-    phone: '123123',
+    name: 'Moika 1',
+    detail: 'Moika 1 detail',
+    address: 'Somethin street',
+    number: '+77472281337',
+    coordinates: [43.211673, 76.857594],
+    serviceType: 'Автомойка',
+    workTime: '9:00 - 21:00',
   },
   {
     image: carwashImage,
-    name: 'Second',
-    address: 'Sometthin St.',
-    phone: '123123',
+    name: 'Moika 2',
+    detail: 'Moika 2 detail',
+    address: 'Somethin street',
+    number: '+77472281488',
+    coordinates: [43.213786, 76.880576],
+    serviceType: 'Автомойка',
+    workTime: '9:00 - 21:00',
   },
   {
     image: carwashImage,
-    name: 'Third',
-    address: 'Sometthin St.',
-    phone: '123123',
-  },
-  {
-    image: carwashImage,
-    name: 'Fourth',
-    address: 'Sometthin St.',
-    phone: '123123',
-  },
-  {
-    image: carwashImage,
-    name: 'Fifth',
-    address: 'Sometthin St.',
-    phone: '123123',
-  },
-  {
-    image: carwashImage,
-    name: 'Sixth',
-    address: 'Sometthin St.',
-    phone: '123123',
-  },
-  {
-    image: carwashImage,
-    name: 'Seventh',
-    address: 'Sometthin St.',
-    phone: '123123',
-  },
-  {
-    image: carwashImage,
-    name: 'Eighth',
-    address: 'Sometthin St.',
-    phone: '123123',
-  },
-  {
-    image: carwashImage,
-    name: 'Ninth',
-    address: 'Sometthin St.',
-    phone: '123123',
+    name: 'Moika 3',
+    detail: 'Moika 3 detail',
+    address: 'Somethin street',
+    number: '+77472281999',
+    coordinates: [43.25654, 76.92848],
+    serviceType: 'Автомойка',
+    workTime: '9:00 - 21:00',
   },
 ]
 const items2 = [
   {
     image: maintenance,
-    name: 'First',
-    address: 'Sometthin St.',
-    phone: '123123',
+    name: 'СТО 1',
+    detail: 'СТО detail',
+    address: 'Somethin street',
+    number: '+77472281999',
+    coordinates: [43.25654, 76.92848],
+    serviceType: 'СТО',
+    workTime: '9:00 - 21:00',
   },
   {
     image: maintenance,
-    name: 'Second',
-    address: 'Sometthin St.',
-    phone: '123123',
+    name: 'СТО 2',
+    detail: 'СТО detail',
+    address: 'Somethin street',
+    number: '+77472281999',
+    coordinates: [43.25654, 76.92848],
+    serviceType: 'СТО',
+    workTime: '9:00 - 21:00',
   },
   {
     image: maintenance,
-    name: 'Third',
-    address: 'Sometthin St.',
-    phone: '123123',
+    name: 'СТО 3',
+    detail: 'СТО detail',
+    address: 'Somethin street',
+    number: '+77472281999',
+    coordinates: [43.25654, 76.92848],
+    serviceType: 'СТО',
+    workTime: '9:00 - 21:00',
   },
   {
     image: maintenance,
-    name: 'Fourth',
-    address: 'Sometthin St.',
-    phone: '123123',
-  },
-  {
-    image: maintenance,
-    name: 'Fifth',
-    address: 'Sometthin St.',
-    phone: '123123',
-  },
-  {
-    image: maintenance,
-    name: 'Sixth',
-    address: 'Sometthin St.',
-    phone: '123123',
-  },
-  {
-    image: maintenance,
-    name: 'Seventh',
-    address: 'Sometthin St.',
-    phone: '123123',
-  },
-  {
-    image: maintenance,
-    name: 'Eighth',
-    address: 'Sometthin St.',
-    phone: '123123',
-  },
-  {
-    image: maintenance,
-    name: 'Ninth',
-    address: 'Sometthin St.',
-    phone: '123123',
+    name: 'СТО 4',
+    detail: 'СТО detail',
+    address: 'Somethin street',
+    number: '+77472281999',
+    coordinates: [43.25654, 76.92848],
+    serviceType: 'СТО',
+    workTime: '9:00 - 21:00',
   },
 ]
 
+const handleReservation = info => {
+  console.log(info)
+  currentService.data = info
+  router.push('/reservation')
+}
 const handleSearch = () => {
   console.log(searchQuery.value)
 }
@@ -307,6 +280,7 @@ const handleSearch = () => {
   }
 
   .carousel-item {
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: center;

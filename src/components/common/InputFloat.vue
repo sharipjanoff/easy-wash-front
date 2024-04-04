@@ -1,12 +1,26 @@
 <template>
   <span class="p-float-label">
-    <input-text
-      :id="props.id"
-      class="input"
-      type="text"
-      v-bind="$attrs"
-      autocomplete="off"
-    />
+    <template v-if="id.toLowerCase().includes('password')">
+      <password
+        :id="props.id"
+        class="input"
+        type="text"
+        v-bind="$attrs"
+        autocomplete="off"
+        toggle-mask
+        :feedback="false"
+      />
+    </template>
+    <template v-else>
+      <input-text
+        :id="props.id"
+        class="input"
+        type="text"
+        v-bind="$attrs"
+        autocomplete="off"
+      />
+    </template>
+
     <label :for="props.id">
       <slot v-if="inputIcon" />
       {{ props.label }}
@@ -16,6 +30,7 @@
 
 <script setup>
 import InputText from 'primevue/inputtext'
+import Password from 'primevue/password'
 
 const props = defineProps({
   id: {

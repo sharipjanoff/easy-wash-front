@@ -1,9 +1,8 @@
 <template>
-  <div class="registration-page">
+  <div class="admin-page">
     <form v-if="!isOtp" class="registration-form">
       <div class="registration-form__item">
-        <h1>Регистрация</h1>
-        <h2>Заполните форму</h2>
+        <h2>Создание менеджерского пользователя</h2>
       </div>
       <div class="registration-form__item">
         <input-float v-model="userData.email" id="email" label="Почта" />
@@ -70,7 +69,7 @@
           :should-auto-focus="true"
           input-type="letter-numeric"
           :conditional-class="['one', 'two', 'three', 'four']"
-          @keydown.enter="otpButton.action"
+          @keydown.enter="handleOnComplete"
         />
         <p-button @click="otpButton.action" :disabled="otpButton.disabled">
           Отправить
@@ -84,13 +83,14 @@
 </template>
 
 <script setup>
-import { reactive, ref, computed, markRaw } from 'vue'
-import VOtpInput from 'vue3-otp-input'
+import { computed, markRaw, onBeforeMount, reactive, ref } from 'vue'
+import { useUserStore } from '@/stores/user'
+import router from '@/plugins/router'
 import InputFloat from '@/components/common/InputFloat.vue'
 import PButton from 'primevue/button'
-import router from '@/plugins/router'
 import { authService } from '@/plugins/axios/http/auth'
 
+const userStore = useUserStore()
 const userData = reactive({
   email: null,
   firstName: null,
@@ -104,6 +104,23 @@ const isOtp = ref(false)
 const otpInput = ref('')
 const otp = reactive({
   data: '',
+})
+const otpButton = reactive({
+  error: '',
+  loading: false,
+  action: markRaw(async () => {
+    otpButton.loading = true
+    const verifyOtpResponse = await authService.verifyOtp({
+      id: userData.id,
+      otp: otp.data,
+    })
+    if (verifyOtpResponse?.data?.status === 1) {
+      router.push('/login')
+    } else {
+      otpButton.error = verifyOtpResponse?.data?.message
+    }
+    otpButton.loading = false
+  }),
 })
 const button = reactive({
   error: '',
@@ -156,26 +173,8 @@ const button = reactive({
     const otpResponse = await authService.sendOtp(userData)
     if (otpResponse?.data?.status === 1) {
       userData.id = otpResponse?.data?.value
-      isOtp.value = !isOtp.value
     }
     button.loading = false
-  }),
-})
-const otpButton = reactive({
-  error: '',
-  loading: false,
-  action: markRaw(async () => {
-    otpButton.loading = true
-    const verifyOtpResponse = await authService.verifyOtp({
-      id: userData.id,
-      otp: otp.data,
-    })
-    if (verifyOtpResponse?.data?.status === 1) {
-      router.push('/login')
-    } else {
-      otpButton.error = verifyOtpResponse?.data?.message
-    }
-    otpButton.loading = false
   }),
 })
 
@@ -203,16 +202,22 @@ const validatePassword = password => {
     special.test(password)
   )
 }
+
+onBeforeMount(() => {
+  if (!userStore.data.roles.includes('ADMIN')) {
+    router.push('/')
+  }
+})
 </script>
 
 <style scoped lang="scss">
-.registration-page {
+.admin-page {
   width: 100vw;
   height: calc(100vh - 50px);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  gap: 10px;
+  padding: 25px 25px 75px 25px;
   background: #f7f8fa;
 
   .registration-form,

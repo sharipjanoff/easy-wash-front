@@ -8,7 +8,7 @@
         <img
           v-tooltip="'Обновить фото профиля'"
           class="image-container__image"
-          :class="{ image_active: !mockUserData.image }"
+          :class="{ image_active: !userStore.image }"
           :src="userImage"
           alt="Profile Picture"
           @click="handleClick"
@@ -21,7 +21,7 @@
           accept="image/*"
         />
       </div>
-      <h2>{{ mockUserData.name }}</h2>
+      <h2>{{ userStore.data.fio }}</h2>
     </div>
     <div class="profile-page__item">
       <div class="menu">
@@ -48,15 +48,11 @@
 import { ref } from 'vue'
 import VTooltip from 'primevue/tooltip'
 import uploadImage from '@/assets/icons/add-profile.svg'
+import { useUserStore } from '@/stores/user'
 
-const mockUserData = {
-  image: null,
-  name: 'Miras',
-  surname: 'Sharipzhan',
-  passwordChangeDate: '01/01/24',
-}
+const userStore = useUserStore()
 const hiddenFileInput = ref()
-const userImage = ref(mockUserData.image ? mockUserData.image : uploadImage)
+const userImage = ref(userStore.data.image ? userStore.data.image : uploadImage)
 
 const upload = async evt => {
   const file = evt.target.files[0] // Get the selected file

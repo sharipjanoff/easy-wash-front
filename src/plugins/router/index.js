@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '../../stores/user'
+import { authService } from '../axios/http/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,7 +55,21 @@ const router = createRouter({
       name: 'Reservation Page',
       component: () => import('@/pages/ReservationPage.vue'),
     },
+    {
+      path: '/admin',
+      name: 'Admin Page',
+      component: () => import('@/pages/AdminPage.vue'),
+    },
   ],
+})
+
+router.beforeEach(async (to, from) => {
+  const userStore = useUserStore()
+
+  const isAuthenticated = !userStore?.data.error
+  if (!isAuthenticated && to.name !== 'Login Page') {
+    await router.push('/login')
+  }
 })
 
 export default router

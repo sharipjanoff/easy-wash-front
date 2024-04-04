@@ -48,6 +48,7 @@ import 'leaflet/dist/leaflet.css'
 import PButton from 'primevue/button'
 import pinIcon from '@/assets/icons/pin.png'
 import { useCurrentServiceStore } from '@/stores/currentService'
+import { useCurrentMapPositionStore } from '@/stores/currenMapPosition'
 
 const props = defineProps({
   data: {
@@ -57,9 +58,13 @@ const props = defineProps({
 })
 
 const currentService = useCurrentServiceStore()
+const currentMapPosition = useCurrentMapPositionStore()
 const mapSettings = reactive({
   zoom: 13,
-  center: [43.25654, 76.92848],
+  center:
+    currentMapPosition.coordinates.length > 0
+      ? currentMapPosition.coordinates
+      : [43.25654, 76.92848],
 })
 
 const openReservationPage = info => {

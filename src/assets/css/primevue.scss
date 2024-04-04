@@ -58,3 +58,25 @@
   width: 30px;
   height: 30px;
 }
+.p-toast-message-content {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.p-button.p-button-outlined {
+  color: var(--primary-color) !important;
+  background: none !important;
+  border: 1px solid !important;
+}
+.p-inputtext.p-component.p-password-input {
+  width: 100%;
+}
+.p-input-icon-right > svg {
+  position: absolute;
+  top: 50%;
+  right: 1px;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}

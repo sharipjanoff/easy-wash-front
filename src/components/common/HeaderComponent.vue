@@ -1,26 +1,44 @@
 <template>
   <header class="header" v-if="!isMobile">
     <div class="header__left">
-      <sidebar-component />
+      <sidebar-component :user-data="userData" />
       <router-link class="logo" to="/">EasyWash</router-link>
     </div>
     <div class="header__right">
-      <p-button @click="handleClick()"> Войти </p-button>
+      <p-button
+        @click="() => router.push('/admin')"
+        v-if="userData.roles?.includes('ADMIN')"
+        >Админ панель</p-button
+      >
+      <p-button @click="handleClick()" v-if="userData.firstName">
+        {{ userData.firstName }}
+      </p-button>
     </div>
   </header>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import SidebarComponent from '@/components/common/SidebarComponent.vue'
 import PButton from 'primevue/button'
 import router from '@/plugins/router'
 
+const props = defineProps({
+  userData: {
+    type: Object,
+    required: false,
+    default: null,
+  },
+})
 const viewportWidth = window.innerWidth
 const isMobile = ref(viewportWidth < 650)
 const handleClick = () => {
-  router.push('/login')
+  router.push('/profile')
 }
+
+watch(props.userData, newData => {
+  console.log(newData)
+})
 </script>
 
 <style scoped lang="scss">
@@ -54,6 +72,7 @@ const handleClick = () => {
   }
 
   &__right {
+    gap: 10px;
     margin-right: 25px;
   }
 }

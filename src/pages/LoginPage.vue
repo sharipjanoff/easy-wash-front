@@ -14,6 +14,7 @@
           id="password"
           label="Пароль"
           v-model="userData.password"
+          type="password"
         ></input-float>
       </div>
       <div>
@@ -36,12 +37,15 @@
 </template>
 
 <script setup>
-import { ref, markRaw, reactive, watchEffect } from 'vue'
+import { ref, markRaw, reactive, watchEffect, onBeforeMount } from 'vue'
 import InputFloat from '@/components/common/InputFloat.vue'
 import PButton from 'primevue/button'
 import router from '@/plugins/router'
 import { authService } from '@/plugins/axios/http/auth'
+import instance from '../plugins/axios'
+import { useUserStore } from '@/stores/user'
 
+const userStore = useUserStore()
 const userData = reactive({
   email: null,
   password: null,
@@ -59,9 +63,18 @@ const button = reactive({
       button.loading = false
       return
     }
+    if (response?.data?.access_token) {
+      localStorage.setItem('token', response?.data?.access_token)
+      instance.defaults.headers.common.Authorization = `Bearer ${response?.data?.access_token}`
+      const currentUser = await authService.getCurrentUser()
+      userStore.data = currentUser.data
+      router.push('/')
+    }
     button.loading = false
   }),
 })
+
+onBeforeMount(() => {})
 </script>
 
 <style scoped lang="scss">

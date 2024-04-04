@@ -47,16 +47,8 @@
                 >Профиль</router-link
               >
             </div>
-            <div class="list__item" v-if="isAdmin">
-              <i class="pi pi-cog" style="font-size: 1.5rem"></i>
-              <router-link to="/" class="link" @click="visible = !visible"
-                >Админ Панель</router-link
-              >
-            </div>
           </div>
-          <router-link to="/login" class="link" @click="visible = !visible"
-            >Выйти</router-link
-          >
+          <p-button class="button" @click="signOut"> Выйти </p-button>
         </div>
       </sidebar>
     </div>
@@ -70,12 +62,35 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import PButton from 'primevue/button'
 import Sidebar from 'primevue/sidebar'
 import burgerSvg from '@/assets/icons/burger.svg'
+import instance from '@/plugins/axios'
+import router from '@/plugins/router'
+import { useUserStore } from '@/stores/user'
+
+const props = defineProps({
+  userData: {
+    type: Object,
+    required: false,
+    default: null,
+  },
+})
 
 const visible = ref(false)
-const isAdmin = ref(false)
+const userStore = useUserStore()
+
+const signOut = () => {
+  visible.value = !visible.value
+  localStorage.removeItem('token')
+  userStore.reset()
+  delete instance.defaults.headers.common.Authorization
+  router.push('/login')
+}
+watch(props.userData, newData => {
+  console.log(newData)
+})
 </script>
 
 <style scoped lang="scss">
@@ -113,5 +128,8 @@ const isAdmin = ref(false)
       font-size: 20px;
     }
   }
+}
+.button {
+  align-self: center;
 }
 </style>
