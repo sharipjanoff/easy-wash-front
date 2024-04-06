@@ -80,3 +80,8 @@
   transform: translate(-50%, -50%);
   cursor: pointer;
 }
+.p-icon-field > .p-input-icon {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5rem !important;
+}

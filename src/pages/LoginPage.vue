@@ -66,6 +66,10 @@ const button = reactive({
       button.loading = false
       return
     }
+    if (response?.data?.error_description) {
+      button.error = `Ошибка при авторизации - ${response?.data?.error_description}`
+      button.loading = false
+    }
     if (response?.data?.access_token) {
       localStorage.setItem('token', response?.data?.access_token)
       instance.defaults.headers.common.Authorization = `Bearer ${response?.data?.access_token}`

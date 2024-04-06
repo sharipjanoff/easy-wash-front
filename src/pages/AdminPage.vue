@@ -3,6 +3,7 @@
     <div class="page-header">
       <h1 class="page-header__title">Админ панель</h1>
     </div>
+    <div class="admin-page__item"></div>
     <div class="admin-page__item">
       <registration-form
         v-if="!isOtp"
@@ -107,7 +108,7 @@ onBeforeMount(() => {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 25px 25px 75px 25px;
+  padding: 25px;
   background: #f7f8fa;
   overflow-y: scroll;
 

@@ -13,15 +13,15 @@
       ></l-tile-layer>
       <template v-for="(item, index) of data" :key="index">
         <l-marker
-          :lat-lng="item.coordinates"
-          @click="zoomInIcon(item.coordinates)"
+          :lat-lng="[item.lon, item.lat]"
+          @click="zoomInIcon([item.lon, item.lat])"
         >
           <l-icon :icon-url="pinIcon" :icon-size="[40, 40]" />
           <l-popup>
             <div class="station-info">
               <div class="station-info__item">Название: {{ item.name }}</div>
-              <div class="station-info__item">Телефон: {{ item.number }}</div>
-              <div class="station-info__item">Адрес: {{ item.address }}</div>
+              <div class="station-info__item">Телефон: {{ item.phone }}</div>
+              <div class="station-info__item">Адрес: {{ item.location }}</div>
               <p-button
                 label="Оформить резервацию"
                 @click="openReservationPage(item)"

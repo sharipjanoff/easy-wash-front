@@ -19,7 +19,7 @@
                     <h3>Адрес</h3>
                   </div>
                   <div class="info__value">
-                    {{ data.address }}
+                    {{ data.location }}
                   </div>
                 </div>
               </div>
@@ -45,7 +45,7 @@
                     <h3>Об услугах</h3>
                   </div>
                   <div class="info__value">
-                    {{ data.serviceType }}
+                    {{ data.description }}
                   </div>
                 </div>
               </div>

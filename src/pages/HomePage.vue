@@ -28,9 +28,10 @@
       </p-button>
     </div>
     <div class="home-page__item">
-      <h2>СТО</h2>
+      <h2>Автомойки</h2>
       <carousel
-        :value="items"
+        v-if="carWashes"
+        :value="carWashes"
         :num-visible="3"
         :num-scroll="3"
         :responsive-options="responsiveOptions"
@@ -39,14 +40,14 @@
           <div class="carousel-item" @click="handleReservation(slotProps.data)">
             <img
               class="carousel-item__image"
-              :src="slotProps.data.image"
+              :src="slotProps.data.image ?? carwashImage"
               alt="Carwash Image"
             />
             <div class="carousel-item__name">
               {{ slotProps.data.name }}
             </div>
             <div class="carousel-item__address">
-              {{ slotProps.data.address }}
+              {{ slotProps.data.location }}
             </div>
             <div class="carousel-item__phone">
               {{ slotProps.data.phone }}
@@ -56,7 +57,7 @@
       </carousel>
     </div>
     <div class="home-page__item">
-      <h2>Автомойки</h2>
+      <h2>СТО</h2>
       <carousel
         :value="items2"
         :num-visible="3"
@@ -87,7 +88,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, reactive } from 'vue'
 import router from '../plugins/router'
 import PButton from 'primevue/button'
 import InputText from 'primevue/inputtext'
@@ -96,7 +97,7 @@ import carwashImage from '@/assets/images/carwash.webp'
 import maintenance from '@/assets/images/maintenance.webp'
 import { useCurrentServiceStore } from '@/stores/currentService'
 import { useUserStore } from '@/stores/user'
-import { authService } from '@/plugins/axios/http/auth'
+import { carsService } from '@/plugins/axios/http/cars'
 
 const currentService = useCurrentServiceStore()
 const userStore = useUserStore()
@@ -124,38 +125,7 @@ const responsiveOptions = ref([
     numScroll: 1,
   },
 ])
-const items = [
-  {
-    image: carwashImage,
-    name: 'Moika 1',
-    detail: 'Moika 1 detail',
-    address: 'Somethin street',
-    number: '+77472281337',
-    coordinates: [43.211673, 76.857594],
-    serviceType: 'Автомойка',
-    workTime: '9:00 - 21:00',
-  },
-  {
-    image: carwashImage,
-    name: 'Moika 2',
-    detail: 'Moika 2 detail',
-    address: 'Somethin street',
-    number: '+77472281488',
-    coordinates: [43.213786, 76.880576],
-    serviceType: 'Автомойка',
-    workTime: '9:00 - 21:00',
-  },
-  {
-    image: carwashImage,
-    name: 'Moika 3',
-    detail: 'Moika 3 detail',
-    address: 'Somethin street',
-    number: '+77472281999',
-    coordinates: [43.25654, 76.92848],
-    serviceType: 'Автомойка',
-    workTime: '9:00 - 21:00',
-  },
-]
+const carWashes = ref(null)
 const items2 = [
   {
     image: maintenance,
@@ -202,11 +172,16 @@ const items2 = [
 const handleReservation = info => {
   console.log(info)
   currentService.data = info
+  console.log(currentService.data)
   router.push('/reservation')
 }
 const handleSearch = () => {
   console.log(searchQuery.value)
 }
+
+onBeforeMount(async () => {
+  carWashes.value = (await carsService.getWashingCentersList())?.data
+})
 </script>
 
 <style scoped lang="scss">
@@ -216,7 +191,7 @@ const handleSearch = () => {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 25px 25px 75px 25px;
+  padding: 25px;
   background: #f7f8fa;
   overflow-y: scroll;
 

@@ -1,7 +1,8 @@
 <template>
   <form class="registration-form">
     <div class="registration-form__item">
-      <h2>Создание менеджерского пользователя</h2>
+      <h2 v-if="!isManager">Регистрация</h2>
+      <h2 v-else>Создание менеджерского пользователя</h2>
     </div>
     <div class="registration-form__item">
       <input-float v-model="userData.email" id="email" label="Почта" />

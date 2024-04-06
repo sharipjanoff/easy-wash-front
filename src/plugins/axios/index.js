@@ -8,7 +8,7 @@ export const instance = axios.create({
   baseURL: BACKEND_URL,
 })
 
-if (token) {
+if (!token.includes('null')) {
   instance.defaults.headers.common.Authorization = token
 }
 
