@@ -1,4 +1,5 @@
 import instance from '../index'
+import { useUserStore } from '@/stores/user'
 
 export const authService = {
   signUp: async data => {
@@ -7,13 +8,13 @@ export const authService = {
       lastName: data.lastName,
       email: data.email,
       password: data.password,
-      type: 'CLIENT',
+      type: data.type,
       phone: data.phone,
     }
     try {
       return await instance.post('/users/registration', payload)
     } catch (e) {
-      return e.response
+      return e.response ? e.response : null
     }
   },
   signIn: async data => {
@@ -30,7 +31,7 @@ export const authService = {
         },
       })
     } catch (e) {
-      return e.response
+      return e.response ? e.response : null
     }
   },
   sendOtp: async data => {
@@ -40,7 +41,7 @@ export const authService = {
     try {
       return await instance.post('/users/actions/generate-code', payload)
     } catch (e) {
-      return e.response
+      return e.response ? e.response : null
     }
   },
   verifyOtp: async data => {
@@ -50,14 +51,18 @@ export const authService = {
     try {
       return await instance.post('/users/actions/email-verify', payload)
     } catch (e) {
-      return e.response
+      return e.response ? e.response : null
     }
   },
   getCurrentUser: async () => {
     try {
       return await instance.get('/users/current')
     } catch (e) {
-      return e.response
+      return e.response ? e.response : null
     }
   },
+}
+
+export async function initializeAuth() {
+  return await authService.getCurrentUser()
 }

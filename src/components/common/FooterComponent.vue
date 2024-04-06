@@ -15,13 +15,33 @@
     <router-link class="footer__item" to="/profile">
       <i class="pi pi-user" style="font-size: 1.5rem"></i>
     </router-link>
+    <router-link
+      class="footer__item"
+      to="/admin"
+      v-if="userData.roles?.includes('ADMIN')"
+    >
+      <i class="pi pi-user-plus" style="font-size: 1.5rem"></i>
+    </router-link>
+    <router-link
+      class="footer__item"
+      to="/manager"
+      v-if="userData.roles?.includes('EMPLOYEE')"
+    >
+      <i class="pi pi-user-plus" style="font-size: 1.5rem"></i>
+    </router-link>
   </footer>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import SidebarComponent from '@/components/common/SidebarComponent.vue'
 
+const props = defineProps({
+  userData: {
+    type: Object,
+    required: false,
+    default: null,
+  },
+})
 const viewportWidth = window.innerWidth
 const isMobile = ref(viewportWidth < 650)
 </script>

@@ -6,19 +6,12 @@
         class="input"
         type="text"
         v-bind="$attrs"
-        autocomplete="off"
         toggle-mask
         :feedback="false"
       />
     </template>
     <template v-else>
-      <input-text
-        :id="props.id"
-        class="input"
-        type="text"
-        v-bind="$attrs"
-        autocomplete="off"
-      />
+      <input-text :id="props.id" class="input" type="text" v-bind="$attrs" />
     </template>
 
     <label :for="props.id">

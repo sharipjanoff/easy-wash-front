@@ -99,6 +99,7 @@ const userData = reactive({
   password: null,
   passwordConfirm: null,
   id: null,
+  type: null,
 })
 const isOtp = ref(false)
 const otpInput = ref('')
@@ -109,7 +110,7 @@ const button = reactive({
   error: '',
   loading: false,
   disabled: computed(() => {
-    const fields = Object.values(userData).slice(0, -1)
+    const fields = Object.values(userData).slice(0, -2)
     if (fields.includes(null) || fields.includes('')) {
       button.error = 'Заполните все поля'
       return true
@@ -147,9 +148,12 @@ const button = reactive({
       console.error('Validation failed:', button.error)
       return
     }
+    userData.type = 'CLIENT'
     const response = await authService.signUp(userData)
-    if (response?.data?.status === 2) {
-      button.error = `Ошибка при регистрации - ${response?.data?.message}`
+    if (response?.data?.status === 2 || !response) {
+      button.error = `Ошибка при регистрации - ${
+        response?.data?.message || 'сервис временно недоступен, попробуй позже'
+      }`
       button.loading = false
       return
     }
@@ -214,6 +218,7 @@ const validatePassword = password => {
   justify-content: center;
   align-items: center;
   background: #f7f8fa;
+  overflow-y: scroll;
 
   .registration-form,
   .otp {

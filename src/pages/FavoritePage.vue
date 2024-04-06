@@ -29,6 +29,7 @@ const favoritesList = ref([])
   gap: 10px;
   padding: 25px 25px 75px 25px;
   background: #f7f8fa;
+  overflow-y: scroll;
 
   &__item {
     display: flex;

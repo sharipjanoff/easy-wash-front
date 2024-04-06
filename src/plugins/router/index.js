@@ -60,15 +60,27 @@ const router = createRouter({
       name: 'Admin Page',
       component: () => import('@/pages/AdminPage.vue'),
     },
+    {
+      path: '/manager',
+      name: 'Manager Page',
+      component: () => import('@/pages/ManagerPage.vue'),
+    },
   ],
 })
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()
+  const dataLength = Object.keys(userStore.data).length
+  const isAuthenticated = dataLength > 0 && !userStore?.data?.error
 
-  const isAuthenticated = !userStore?.data.error
-  if (!isAuthenticated && to.name !== 'Login Page') {
-    await router.push('/login')
+  if (
+    !isAuthenticated &&
+    to.name !== 'Login Page' &&
+    to.name !== 'Registration Page'
+  ) {
+    next('/login')
+  } else {
+    next()
   }
 })
 

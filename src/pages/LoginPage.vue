@@ -7,6 +7,7 @@
           id="email"
           label="Почта"
           v-model="userData.email"
+          autocomplete="on"
         ></input-float>
       </div>
       <div class="login-form__item">
@@ -58,8 +59,10 @@ const button = reactive({
     e.preventDefault()
     button.loading = true
     const response = await authService.signIn(userData)
-    if (response?.data?.status === 2) {
-      button.error = `Ошибка при авторизации - ${response?.data?.message}`
+    if (response?.data?.status === 2 || !response) {
+      button.error = `Ошибка при авторизации - ${
+        response?.data?.message || 'сервис временно недоступен, попробуй позже'
+      }`
       button.loading = false
       return
     }
@@ -86,6 +89,7 @@ onBeforeMount(() => {})
   justify-content: center;
   align-items: center;
   background: #f7f8fa;
+  overflow-y: scroll;
 
   .login-form {
     text-align: center;
@@ -97,6 +101,10 @@ onBeforeMount(() => {})
     background: #ffffff;
     padding: 20px;
     border-radius: 10px;
+  }
+
+  .error {
+    color: red;
   }
 }
 </style>

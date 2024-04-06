@@ -7,10 +7,15 @@
     <div class="header__right">
       <p-button
         @click="() => router.push('/admin')"
-        v-if="userData.roles?.includes('ADMIN')"
+        v-if="userData?.roles?.includes('ADMIN')"
         >Админ панель</p-button
       >
-      <p-button @click="handleClick()" v-if="userData.firstName">
+      <p-button
+        @click="() => router.push('/manager')"
+        v-if="userData?.roles?.includes('EMPLOYEE')"
+        >Менеджерская панель</p-button
+      >
+      <p-button @click="handleClick()" v-if="userData?.firstName">
         {{ userData.firstName }}
       </p-button>
     </div>
