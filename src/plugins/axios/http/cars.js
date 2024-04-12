@@ -22,4 +22,11 @@ export const carsService = {
       return e.response ? e.response : null
     }
   },
+  createCarBody: async payload => {
+    try {
+      return await instance.post('/cars/carbody/create', payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
 }

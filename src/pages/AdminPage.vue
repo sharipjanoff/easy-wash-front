@@ -19,6 +19,13 @@
         @send-request="sendOtp($event)"
       />
     </div>
+    <div class="admin-page__item">
+      <car-body-form
+        :error="carBody.error"
+        :loading="carBody.loading"
+        @send-request="createCarBody($event)"
+      />
+    </div>
   </div>
 </template>
 
@@ -28,8 +35,10 @@ import { useToast } from 'primevue/usetoast'
 import { useUserStore } from '@/stores/user'
 import router from '@/plugins/router'
 import { authService } from '@/plugins/axios/http/auth'
+import { carsService } from '@/plugins/axios/http/cars'
 import RegistrationForm from '@/components/common/RegistrationForm.vue'
 import OtpForm from '@/components/common/OtpForm.vue'
+import CarBodyForm from '@/components/admin/CarBodyForm.vue'
 
 const userStore = useUserStore()
 const registration = reactive({
@@ -47,6 +56,14 @@ const registration = reactive({
 })
 const otp = reactive({
   code: '',
+  loading: false,
+  error: '',
+})
+const carBody = reactive({
+  data: {
+    type: null,
+    ruName: null,
+  },
   loading: false,
   error: '',
 })
@@ -92,6 +109,21 @@ const sendOtp = async data => {
     otp.error = `Ошибка - ${verifyOtpResponse?.data?.message}`
   }
   otp.loading = false
+}
+const createCarBody = async data => {
+  carBody.loading = true
+  const createCarBodyResponse = await carsService.createCarBody(data)
+  if (createCarBodyResponse?.data?.status === 1) {
+    toast.add({
+      severity: 'success',
+      summary: 'Упешно!',
+      detail: `Пользователь "${registration.userData.email}" был создан`,
+      life: 3000,
+    })
+  } else {
+    carBody.error = `Ошибка! Кузов - ${data?.type} не был создан`
+  }
+  carBody.loading = false
 }
 
 onBeforeMount(() => {
