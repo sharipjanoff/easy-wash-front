@@ -2,9 +2,6 @@
   <div class="create-price">
     <div class="create-price__item">
       <h2>Настройка цен для автомойки по типу кузова</h2>
-      <p>
-        Айди Автомойки вы можете найти выше в таблице "Список ваших автомоек"
-      </p>
     </div>
     <div class="create-price__item">
       <p-dropdown
@@ -90,7 +87,6 @@ const button = reactive({
   loading: false,
   disabled: computed(() => {
     const fields = Object.values(priceData).slice()
-    console.log(fields)
     if (fields.includes(null) || fields.includes('')) {
       button.error = 'Заполните все поля'
       return true

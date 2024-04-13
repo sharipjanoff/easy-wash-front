@@ -2,9 +2,6 @@
   <div class="create-box">
     <div class="create-box__item">
       <h2>Создание бокса автомойки</h2>
-      <p>
-        Айди Автомойки вы можете найти выше в таблице "Список ваших автомоек"
-      </p>
     </div>
     <div class="create-box__item">
       <input-float v-model="boxData.name" id="name" label="Название бокса" />
@@ -86,6 +83,8 @@ const button = reactive({
       name: boxData.name,
       washingCenterId: boxData.carWash.id,
     })
+    boxData.name = null
+    boxData.carWash = null
   }),
 })
 </script>

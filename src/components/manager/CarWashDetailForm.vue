@@ -2,35 +2,22 @@
   <form class="car-wash-detail-form">
     <template v-for="(value, key) in newData" :key="key">
       <template v-if="displayItems.includes(key)">
-        <div class="car-wash-detail-form__item">
-          <template v-if="key === 'carWashBoxes' || key === 'carWashPrice'">
-            <p>
-              {{ keyTranslationMap[key] }}
-              {{ value.length > 0 ? '' : '- Пусто' }}
-            </p>
-            <template v-for="(item, idx) of value" :key="idx">
-              <input-float
-                v-if="value.length > 0"
-                v-model="carWashBoxes[idx].name"
-                :id="key"
-                :label="`Название бокса № ${idx}`"
-                :value="carWashBoxes[idx].name"
-              />
-            </template>
-          </template>
-          <template v-else>
-            <input-float
-              v-model="newData[key]"
-              :id="key"
-              :label="keyTranslationMap[key]"
-              :value="value"
-            />
-          </template>
+        <div
+          class="car-wash-detail-form__item"
+          v-if="key !== 'carWashBoxes' && key !== 'carWashPrice'"
+        >
+          <input-float
+            v-model="newData[key]"
+            :id="key"
+            :label="keyTranslationMap[key]"
+            :value="value"
+          />
         </div>
       </template>
     </template>
     <div class="car-wash-detail-form__item">
       <p-button
+        class="button"
         @click="button.action"
         :disabled="button.disabled"
         :loading="props.loading"
@@ -40,6 +27,23 @@
       <p class="error" v-if="button.error || props.error">
         {{ button.error || props.error }}
       </p>
+    </div>
+    <div class="car-wash-detail-form__item">
+      <h4>Список Боксов</h4>
+      <template v-if="newData.carWashBoxes.length > 0">
+        <template v-for="(item, idx) of newData.carWashBoxes" :key="idx">
+          <input-float
+            v-model="carWashBoxes[idx].name"
+            :id="carWashBoxes[idx].id"
+            :label="`Название бокса № ${idx}`"
+            :value="carWashBoxes[idx].name"
+          />
+          <p-button class="button" @click="emit('updateBox', carWashBoxes[idx])"
+            >Обновить бокс</p-button
+          >
+        </template>
+      </template>
+      <template v-else>Список пуст</template>
     </div>
   </form>
 </template>
@@ -72,7 +76,7 @@ const props = defineProps({
     },
   },
 })
-const emit = defineEmits(['sendRequest'])
+const emit = defineEmits(['updateWashingCenter', 'updateBox'])
 
 const displayItems = [
   'name',
@@ -83,18 +87,14 @@ const displayItems = [
   'description',
   'carWashPrice',
   'carWashBoxes',
-  'id',
 ]
 const newData = reactive({
-  createdAt: null,
-  updatedAt: null,
   id: null,
   name: null,
   location: null,
   lon: null,
   lat: null,
   phone: null,
-  employee: null,
   description: null,
   carWashBoxes: [],
   carWashPrice: [],
@@ -108,7 +108,6 @@ const keyTranslationMap = {
   description: 'Описание',
   carWashBoxes: 'Список боксов автомойки',
   carWashPrice: 'Список цен на услуги',
-  id: 'Идентификатор (для создания боксов)',
 }
 const carWashBoxes = ref([])
 const button = reactive({
@@ -129,7 +128,7 @@ const button = reactive({
   }),
   action: markRaw(async () => {
     newData.carWashBoxes = [...carWashBoxes.value]
-    emit('sendRequest', newData)
+    emit('updateWashingCenter', newData)
   }),
 })
 
@@ -141,7 +140,13 @@ const validatePhone = phone => {
 }
 
 onBeforeMount(() => {
-  Object.assign(newData, props.data)
+  const existingKeys = Object.keys(newData).filter(key =>
+    props.data.hasOwnProperty(key),
+  )
+  Object.assign(
+    newData,
+    ...existingKeys.map(key => ({ [key]: props.data[key] })),
+  )
   carWashBoxes.value = [...newData.carWashBoxes]
 })
 </script>
@@ -162,10 +167,13 @@ onBeforeMount(() => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 21px;
     .error {
       color: #a20000;
     }
   }
+}
+.button {
+  margin-top: -15px;
 }
 </style>

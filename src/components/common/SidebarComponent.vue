@@ -88,9 +88,6 @@ const signOut = () => {
   delete instance.defaults.headers.common.Authorization
   router.push('/login')
 }
-watch(props.userData, newData => {
-  console.log(newData)
-})
 </script>
 
 <style scoped lang="scss">

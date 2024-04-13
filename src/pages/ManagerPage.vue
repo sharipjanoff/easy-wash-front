@@ -7,7 +7,7 @@
       <car-wash-list
         :loading="!carWashList"
         :data="carWashList"
-        @row-click="openRowDetail($event.data)"
+        @row-click="openCarWashRowDetail($event.data)"
       />
       <Dialog
         v-model:visible="carWashDetailDialog.visible"
@@ -20,7 +20,10 @@
           :data="carWashDetailDialog.rowData"
           :loading="carWashDetailDialog.loading"
           :error="carWashDetailDialog.error"
-          @send-request="carWashDetailDialog.action($event)"
+          @update-washing-center="
+            carWashDetailDialog.updateWashingCenter($event)
+          "
+          @update-box="carWashDetailDialog.updateBox($event)"
         />
       </Dialog>
     </div>
@@ -81,17 +84,20 @@ const createCarWash = reactive({
   },
   loading: false,
   error: '',
-  action: markRaw(data => {
+  action: markRaw(async data => {
     Object.assign(createCarWash.data, data)
     createCarWash.loading = true
 
-    const createResponse = carsService.createWashingCenter(createCarWash.data)
+    const createResponse = await carsService.createWashingCenter(
+      createCarWash.data,
+    )
 
     if (createResponse?.data?.status === 2) {
       createCarWash.error = `Ошибка при регистрации - ${createResponse?.data?.message}`
       createCarWash.loading = false
       return
     } else {
+      carWashList.value = (await carsService.getMyWashingCentersList())?.data
       toast.add({
         severity: 'success',
         summary: 'Упешно!',
@@ -114,7 +120,7 @@ const createBox = reactive({
     Object.assign(createBox.data, data)
     createBox.loading = true
 
-    const createBoxResponse = carsService.createBox(createBox.data)
+    const createBoxResponse = await carsService.createBox(createBox.data)
 
     if (createBoxResponse?.data?.status === 2) {
       createBox.error = `Ошибка при создании бокса - ${createBox?.data?.message}`
@@ -146,9 +152,12 @@ const createPrice = reactive({
     console.log(createPrice.data)
     createPrice.loading = true
 
-    const createPriceResponse = carsService.createPrice(createPrice.data)
+    const createPriceResponse = await carsService.createPrice(createPrice.data)
 
-    if (createPriceResponse?.data?.status === 2) {
+    if (
+      createPriceResponse?.data?.status === 2 ||
+      createPriceResponse?.data?.status === 500
+    ) {
       createBox.error = `Ошибка при создании цены - ${createPriceResponse?.data?.message}`
       createBox.loading = false
       return
@@ -170,14 +179,58 @@ const carWashDetailDialog = reactive({
   visible: false,
   loading: false,
   error: '',
-  action: markRaw(data => {
-    console.log(data)
+  updateWashingCenter: markRaw(async data => {
+    carWashDetailDialog.loading = true
+
+    const updateWashingCenterResponse =
+      await carsService.updateWashingCenter(data)
+
+    if (updateWashingCenterResponse?.data?.status === 2) {
+      createBox.error = `Ошибка при обновлении данных - ${updateWashingCenterResponse?.data?.message}`
+      createBox.loading = false
+      return
+    } else {
+      carWashList.value = (await carsService.getMyWashingCentersList())?.data
+      toast.add({
+        severity: 'success',
+        summary: 'Упешно!',
+        detail: `${data.name} была обновлена!`,
+        life: 3000,
+      })
+    }
+
+    carWashDetailDialog.loading = false
+  }),
+  updateBox: markRaw(async data => {
+    carWashDetailDialog.loading = true
+
+    const updateBoxResponse = await carsService.updateBox({
+      id: data.id,
+      name: data.name,
+    })
+
+    if (updateBoxResponse?.data?.status === 2) {
+      createBox.error = `Ошибка при обновлении данных - ${updateBoxResponse?.data?.message}`
+      createBox.loading = false
+      return
+    } else {
+      carWashList.value = (await carsService.getMyWashingCentersList())?.data
+      toast.add({
+        severity: 'success',
+        summary: 'Упешно!',
+        detail: `Бокс - ${data.name} был обновлен!`,
+        life: 3000,
+      })
+    }
+
+    carWashDetailDialog.loading = false
   }),
 })
 
-const openRowDetail = rowData => {
+const openCarWashRowDetail = rowData => {
   carWashDetailDialog.rowData = rowData
   carWashDetailDialog.visible = true
+  console.log(carWashDetailDialog)
 }
 
 onBeforeMount(async () => {

@@ -94,6 +94,12 @@ const button = reactive({
   }),
   action: markRaw(() => {
     emit('sendRequest', carWashData)
+    carWashData.name = null
+    carWashData.location = null
+    carWashData.lon = null
+    carWashData.lat = null
+    carWashData.phone = null
+    carWashData.description = null
   }),
 })
 
