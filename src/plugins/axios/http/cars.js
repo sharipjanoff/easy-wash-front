@@ -15,6 +15,13 @@ export const carsService = {
       return e.response ? e.response : null
     }
   },
+  getMyWashingCentersList: async () => {
+    try {
+      return await instance.get('/cars/washing-center/list-my')
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
   createBox: async payload => {
     try {
       return await instance.post('/cars/box/create', payload)
@@ -22,9 +29,23 @@ export const carsService = {
       return e.response ? e.response : null
     }
   },
+  createPrice: async payload => {
+    try {
+      return await instance.post('/cars/price/create', payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
   createCarBody: async payload => {
     try {
       return await instance.post('/cars/carbody/create', payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  getCarBodyList: async () => {
+    try {
+      return await instance.get('/cars/carbody/list')
     } catch (e) {
       return e.response ? e.response : null
     }

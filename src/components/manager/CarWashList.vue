@@ -1,13 +1,17 @@
 <template>
   <div class="car-wash-list">
     <h2>Список ваших автомоек</h2>
-    <data-table class="table" :value="data" paginator :rows="5">
+    <data-table
+      :loading="props.loading"
+      class="table"
+      :value="data"
+      paginator
+      :rows="5"
+      @row-click="emit('row-click', $event)"
+    >
       <column field="name" header="Название"></column>
       <column field="location" header="Адрес"></column>
-      <column field="lat" header="Долгота"></column>
-      <column field="lon" header="Широта"></column>
       <column field="phone" header="Телефон"></column>
-      <column field="id" header="Айди автомойки"></column>
     </data-table>
   </div>
 </template>
@@ -24,7 +28,15 @@ const props = defineProps({
       return []
     },
   },
+  loading: {
+    type: Boolean,
+    required: true,
+    default: () => {
+      return false
+    },
+  },
 })
+const emit = defineEmits(['row-click'])
 </script>
 
 <style scoped lang="scss">

@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import SidebarComponent from '@/components/common/SidebarComponent.vue'
 import PButton from 'primevue/button'
 import router from '@/plugins/router'
@@ -40,10 +40,6 @@ const isMobile = ref(viewportWidth < 650)
 const handleClick = () => {
   router.push('/profile')
 }
-
-watch(props.userData, newData => {
-  console.log(newData)
-})
 </script>
 
 <style scoped lang="scss">

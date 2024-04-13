@@ -117,7 +117,7 @@ const createCarBody = async data => {
     toast.add({
       severity: 'success',
       summary: 'Упешно!',
-      detail: `Пользователь "${registration.userData.email}" был создан`,
+      detail: `Кузов "${data.ruName}" был создан`,
       life: 3000,
     })
   } else {

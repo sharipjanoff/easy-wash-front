@@ -1,24 +1,33 @@
 <template>
-  <div class="create-box">
-    <div class="create-box__item">
-      <h2>Создание бокса автомойки</h2>
+  <div class="create-price">
+    <div class="create-price__item">
+      <h2>Настройка цен для автомойки по типу кузова</h2>
       <p>
         Айди Автомойки вы можете найти выше в таблице "Список ваших автомоек"
       </p>
     </div>
-    <div class="create-box__item">
-      <input-float v-model="boxData.name" id="name" label="Название бокса" />
-    </div>
-    <div class="create-box__item">
+    <div class="create-price__item">
       <p-dropdown
-        v-model="boxData.carWash"
+        v-model="priceData.washingCenter"
         :options="carWashList"
         option-label="name"
         placeholder="Выберите автомойку"
         style="width: 300px; text-align: left"
       />
     </div>
+    <div class="create-price__item">
+      <p-dropdown
+        v-model="priceData.carBody"
+        :options="carBodyList"
+        option-label="ruName"
+        placeholder="Выберите тип кузова"
+        style="width: 300px; text-align: left"
+      />
+    </div>
     <div class="create-box__item">
+      <input-float v-model="priceData.cost" id="cost" label="Цена" />
+    </div>
+    <div class="create-price__item">
       <p-button
         @click="button.action"
         :disabled="button.disabled"
@@ -47,6 +56,13 @@ const props = defineProps({
       return []
     },
   },
+  carBodyList: {
+    type: Array,
+    required: true,
+    default: () => {
+      return []
+    },
+  },
   loading: {
     type: Boolean,
     required: false,
@@ -64,16 +80,17 @@ const props = defineProps({
 })
 const emit = defineEmits(['sendRequest'])
 
-const boxData = reactive({
-  name: null,
-  carWash: null,
+const priceData = reactive({
+  washingCenter: null,
+  carBody: null,
+  cost: null,
 })
-
 const button = reactive({
   error: '',
   loading: false,
   disabled: computed(() => {
-    const fields = Object.values(boxData).slice()
+    const fields = Object.values(priceData).slice()
+    console.log(fields)
     if (fields.includes(null) || fields.includes('')) {
       button.error = 'Заполните все поля'
       return true
@@ -83,15 +100,16 @@ const button = reactive({
   }),
   action: markRaw(() => {
     emit('sendRequest', {
-      name: boxData.name,
-      washingCenterId: boxData.carWash.id,
+      cost: priceData.cost,
+      washingCenterId: priceData.washingCenter.id,
+      carBodyTypeId: priceData.carBody.id,
     })
   }),
 })
 </script>
 
 <style scoped lang="scss">
-.create-box {
+.create-price {
   text-align: center;
   display: flex;
   flex-direction: column;
