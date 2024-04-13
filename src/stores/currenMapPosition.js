@@ -4,6 +4,7 @@ export const useCurrentMapPositionStore = defineStore('currentMapPosition', {
   state: () => {
     return {
       coordinates: [],
+      zoom: 13,
     }
   },
 })

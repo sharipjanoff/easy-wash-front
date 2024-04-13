@@ -39,6 +39,7 @@ const action = type => {
       currentServiceStore.data.lon,
       currentServiceStore.data.lat,
     ]
+    currentMapPositionStore.zoom = 25
     router.push('/map')
   } else {
     toast.add({

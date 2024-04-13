@@ -60,7 +60,7 @@ const props = defineProps({
 const currentService = useCurrentServiceStore()
 const currentMapPosition = useCurrentMapPositionStore()
 const mapSettings = reactive({
-  zoom: 13,
+  zoom: currentMapPosition.zoom,
   center:
     currentMapPosition.coordinates.length > 0
       ? currentMapPosition.coordinates

@@ -56,34 +56,34 @@
         </template>
       </carousel>
     </div>
-    <div class="home-page__item">
-      <h2>СТО</h2>
-      <carousel
-        :value="items2"
-        :num-visible="3"
-        :num-scroll="3"
-        :responsive-options="responsiveOptions"
-      >
-        <template #item="slotProps">
-          <div class="carousel-item" @click="handleReservation(slotProps.data)">
-            <img
-              class="carousel-item__image"
-              :src="slotProps.data.image"
-              alt="Carwash Image"
-            />
-            <div class="carousel-item__name">
-              {{ slotProps.data.name }}
-            </div>
-            <div class="carousel-item__address">
-              {{ slotProps.data.address }}
-            </div>
-            <div class="carousel-item__phone">
-              {{ slotProps.data.phone }}
-            </div>
-          </div>
-        </template>
-      </carousel>
-    </div>
+    <!--    <div class="home-page__item">-->
+    <!--      <h2>СТО</h2>-->
+    <!--      <carousel-->
+    <!--        :value="items2"-->
+    <!--        :num-visible="3"-->
+    <!--        :num-scroll="3"-->
+    <!--        :responsive-options="responsiveOptions"-->
+    <!--      >-->
+    <!--        <template #item="slotProps">-->
+    <!--          <div class="carousel-item" @click="handleReservation(slotProps.data)">-->
+    <!--            <img-->
+    <!--              class="carousel-item__image"-->
+    <!--              :src="slotProps.data.image"-->
+    <!--              alt="Carwash Image"-->
+    <!--            />-->
+    <!--            <div class="carousel-item__name">-->
+    <!--              {{ slotProps.data.name }}-->
+    <!--            </div>-->
+    <!--            <div class="carousel-item__address">-->
+    <!--              {{ slotProps.data.address }}-->
+    <!--            </div>-->
+    <!--            <div class="carousel-item__phone">-->
+    <!--              {{ slotProps.data.phone }}-->
+    <!--            </div>-->
+    <!--          </div>-->
+    <!--        </template>-->
+    <!--      </carousel>-->
+    <!--    </div>-->
   </div>
 </template>
 
