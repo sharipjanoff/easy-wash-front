@@ -95,6 +95,7 @@ const button = reactive({
     return false
   }),
   action: markRaw(() => {
+    console.log(priceData)
     emit('sendRequest', {
       cost: priceData.cost,
       washingCenterId: priceData.washingCenter.id,

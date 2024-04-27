@@ -239,6 +239,7 @@ onBeforeMount(async () => {
   }
   carWashList.value = (await carsService.getMyWashingCentersList())?.data
   carBodyList.value = (await carsService.getCarBodyList())?.data
+  console.log(carBodyList.value)
 })
 </script>
 

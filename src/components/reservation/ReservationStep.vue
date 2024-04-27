@@ -29,9 +29,23 @@
           </p-button>
         </div>
       </div>
-      {{ date }}
-      {{ selectedTime }}
-      <p-button class="button" label="Дальше" />
+      <h2>Выберите машину</h2>
+      <p-dropdown
+        v-model="selectedCar"
+        :options="carList"
+        option-label="mark"
+        placeholder="Выберите авто"
+        style="width: 300px; text-align: left"
+      />
+      <p>
+        Список пуст?
+        <router-link to="/profile/cars">Создайте машину</router-link>
+      </p>
+      <p-button
+        class="button"
+        label="Дальше"
+        @click="emit('reserve', { date, selectedTime, selectedCar })"
+      />
     </div>
   </div>
 </template>
@@ -40,11 +54,23 @@
 import { nextTick, ref, reactive } from 'vue'
 import Calendar from 'primevue/calendar'
 import PButton from 'primevue/button'
+import PDropdown from 'primevue/dropdown'
 
+const props = defineProps({
+  carList: {
+    type: [Array, null],
+    required: true,
+    default: () => {
+      return null
+    },
+  },
+})
 const emit = defineEmits(['dateChange'])
+
 const today = ref(new Date())
-const date = ref(null)
+const date = ref(today)
 const selectedTime = ref(null)
+const selectedCar = ref(null)
 const timeTable = reactive([
   {
     range: '09:00 - 10:00',

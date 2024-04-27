@@ -4,9 +4,10 @@
       :is="currenStep"
       @action="action($event)"
       @rate="rate"
-      @reserve="reserve"
-      @date-change="dateChange($event)"
+      @start-reservation="startReservation"
+      @reserve="reserve($event)"
       :data="currentServiceStore.data"
+      :car-list="carList"
     />
   </div>
 </template>
@@ -15,11 +16,13 @@
 import { computed, onBeforeMount, ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import router from '@/plugins/router'
+import { carsService } from '@/plugins/axios/http/cars'
 import { useCurrentMapPositionStore } from '@/stores/currenMapPosition'
 import { useCurrentServiceStore } from '@/stores/currentService'
 import InformationStep from '@/components/reservation/InformationStep.vue'
 import ReservationStep from '@/components/reservation/ReservationStep.vue'
 
+const carList = ref(null)
 const currentServiceStore = useCurrentServiceStore()
 const currentMapPositionStore = useCurrentMapPositionStore()
 const toast = useToast()
@@ -32,8 +35,7 @@ const currenStep = computed(() => {
   return steps[current.value]
 })
 
-const action = type => {
-  console.log(currentServiceStore)
+const action = async type => {
   if (type === 'map') {
     currentMapPositionStore.coordinates = [
       currentServiceStore.data.lon,
@@ -41,7 +43,18 @@ const action = type => {
     ]
     currentMapPositionStore.zoom = 25
     router.push('/map')
-  } else {
+  } else if (type === 'favorite') {
+    const response = await carsService.addCarWashToFavorites({
+      id: currentServiceStore.data.id,
+    })
+    if (response?.data?.status === 2 || !response) {
+      toast.add({
+        severity: 'error',
+        summary: 'Ошибка!',
+        detail: `${currentServiceStore.data.name} - не была добавлена в избранное!`,
+        life: 3000,
+      })
+    }
     toast.add({
       severity: 'success',
       summary: 'Упешно!',
@@ -58,18 +71,19 @@ const rate = () => {
     life: 3000,
   })
 }
-const reserve = () => {
+const startReservation = () => {
   current.value = 'reservation'
 }
-const dateChange = data => {
-  console.log('dateChanged', data.date)
+const reserve = data => {
+  console.log(data)
 }
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   const isStoreEmpty = Object.keys(currentServiceStore.data).length === 0
   if (isStoreEmpty) {
     router.push('/map')
   }
+  carList.value = (await carsService.getMyCarList())?.data
 })
 </script>
 

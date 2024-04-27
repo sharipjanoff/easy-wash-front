@@ -65,7 +65,7 @@
               </div>
             </div>
             <p-button
-              @click="emit('reserve')"
+              @click="emit('start-reservation')"
               class="button"
               label="Записаться"
             />
@@ -106,7 +106,8 @@ const props = defineProps({
     required: true,
   },
 })
-const emit = defineEmits(['action', 'rate', 'reserve'])
+console.log(props.data)
+const emit = defineEmits(['action', 'rate', 'start-reservation'])
 
 const ratingValue = ref(null)
 const reviews = ref([])
