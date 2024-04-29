@@ -31,6 +31,7 @@
       </div>
       <h2>Выберите машину</h2>
       <p-dropdown
+        @change="emit('getPrice', selectedCar.carBodyId)"
         v-model="selectedCar"
         :options="carList"
         option-label="mark"
@@ -41,17 +42,34 @@
         Список пуст?
         <router-link to="/profile/cars">Создайте машину</router-link>
       </p>
+      <div v-if="price">Цена на услугу составит - {{ price.cost }} тенге</div>
+      <h2>Выберите бокс</h2>
+      <p-dropdown
+        v-model="selectedCarBox"
+        :options="carBoxList"
+        option-label="name"
+        placeholder="Выберите бокс"
+        style="width: 300px; text-align: left"
+      />
       <p-button
+        :disabled="disabled"
         class="button"
         label="Дальше"
-        @click="emit('reserve', { date, selectedTime, selectedCar })"
+        @click="
+          emit('reserve', {
+            date,
+            selectedTime: selectedTime.range,
+            selectedCar,
+            selectedCarBox,
+          })
+        "
       />
     </div>
   </div>
 </template>
 
 <script setup>
-import { nextTick, ref, reactive } from 'vue'
+import { nextTick, ref, reactive, computed } from 'vue'
 import Calendar from 'primevue/calendar'
 import PButton from 'primevue/button'
 import PDropdown from 'primevue/dropdown'
@@ -64,42 +82,61 @@ const props = defineProps({
       return null
     },
   },
+  carBoxList: {
+    type: [Array, null],
+    required: true,
+    default: () => {
+      return null
+    },
+  },
+  price: {
+    type: [Object, null],
+    required: false,
+    default: () => {
+      return null
+    },
+  },
 })
-const emit = defineEmits(['dateChange'])
+const emit = defineEmits(['dateChange', 'getPrice'])
 
 const today = ref(new Date())
 const date = ref(today)
 const selectedTime = ref(null)
 const selectedCar = ref(null)
+const selectedCarBox = ref(null)
+const disabled = computed(() => {
+  if (!date.value || !selectedCar.value || !selectedTime.value) return true
+  return false
+})
 const timeTable = reactive([
   {
     range: '09:00 - 10:00',
-    available: false,
+    available: true,
     selected: false,
   },
   {
     range: '10:00 - 11:00',
-    available: false,
+    available: true,
     selected: false,
   },
   {
     range: '11:00 - 12:00',
-    available: false,
+    available: true,
     selected: false,
   },
   {
     range: '12:00 - 13:00',
-    available: false,
+    available: true,
     selected: false,
   },
   {
     range: '14:00 - 15:00',
-    available: false,
+    available: true,
     selected: false,
   },
   {
     range: '16:00 - 17:00',
-    available: false,
+    available: true,
     selected: false,
   },
   {
@@ -134,6 +171,7 @@ const timeTable = reactive([
     border-radius: 10px;
     background: #fff;
     width: 100%;
+    font-size: 16px;
 
     .time-table {
       display: flex;

@@ -2,12 +2,16 @@
   <div class="reservation-page">
     <component
       :is="currenStep"
+      :data="currentServiceStore.data"
+      :car-list="carList"
+      :price="currentCarPrice"
+      :car-box-list="carBoxList"
+      :reservation-data="reservationData"
       @action="action($event)"
       @rate="rate"
       @start-reservation="startReservation"
       @reserve="reserve($event)"
-      :data="currentServiceStore.data"
-      :car-list="carList"
+      @get-price="getPrice($event)"
     />
   </div>
 </template>
@@ -21,15 +25,20 @@ import { useCurrentMapPositionStore } from '@/stores/currenMapPosition'
 import { useCurrentServiceStore } from '@/stores/currentService'
 import InformationStep from '@/components/reservation/InformationStep.vue'
 import ReservationStep from '@/components/reservation/ReservationStep.vue'
+import FinishStep from '@/components/reservation/FinishStep.vue'
 
-const carList = ref(null)
 const currentServiceStore = useCurrentServiceStore()
 const currentMapPositionStore = useCurrentMapPositionStore()
 const toast = useToast()
+const carList = ref(null)
+const carBoxList = ref(null)
 const current = ref('information')
+const currentCarPrice = ref(null)
+const reservationData = ref(null)
 const steps = {
   information: InformationStep,
   reservation: ReservationStep,
+  finish: FinishStep,
 }
 const currenStep = computed(() => {
   return steps[current.value]
@@ -74,8 +83,57 @@ const rate = () => {
 const startReservation = () => {
   current.value = 'reservation'
 }
-const reserve = data => {
-  console.log(data)
+const reserve = async data => {
+  const normalizedDate = normalizeDate(data.date, data.selectedTime)
+  reservationData.value = {
+    ...data,
+    normalizedDate,
+    washingCenter: currentServiceStore.data,
+  }
+  const payload = {
+    carWashPriceId: currentCarPrice.value.id,
+    carWashBoxId: data.selectedCarBox.id,
+    carId: data.selectedCar.id,
+    dateTime: normalizedDate,
+  }
+  const response = await carsService.createOrder(payload)
+  if (response?.data?.status === 2 || !response) {
+    toast.add({
+      severity: 'error',
+      summary: 'Ошибка!',
+      detail:
+        'Резервация не была оформелна, убедитесь в правильности заполненных данных',
+      life: 3000,
+    })
+    return
+  }
+  toast.add({
+    severity: 'success',
+    summary: 'Упешно!',
+    detail: 'Резервация создана!',
+    life: 3000,
+  })
+  current.value = 'finish'
+}
+
+const getPrice = async carBodyId => {
+  const washingCenterId = currentServiceStore.data.id
+  currentCarPrice.value = (
+    await carsService.getPriceById({
+      washingCenterId,
+      carBodyId,
+    })
+  )?.data
+}
+
+function normalizeDate(dateString, timeString) {
+  const date =
+    dateString instanceof Date
+      ? dateString.toISOString().split('T')[0]
+      : dateString
+  const startTime = timeString.split(' - ')[0].replace(' ', '') + ':00'
+  const normalizedDateTime = `${date} ${startTime}`
+  return normalizedDateTime
 }
 
 onBeforeMount(async () => {
@@ -84,6 +142,11 @@ onBeforeMount(async () => {
     router.push('/map')
   }
   carList.value = (await carsService.getMyCarList())?.data
+  carBoxList.value = (
+    await carsService.getBoxesByWashingCenterId({
+      id: currentServiceStore.data.id,
+    })
+  )?.data
 })
 </script>
 

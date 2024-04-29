@@ -67,9 +67,25 @@ export const carsService = {
       return e.response ? e.response : null
     }
   },
+  getBoxesByWashingCenterId: async payload => {
+    try {
+      return await instance.get(`/cars/box/list/${payload.id}`, payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
   createPrice: async payload => {
     try {
       return await instance.post('/cars/price/create', payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  getPriceById: async payload => {
+    try {
+      return await instance.get(
+        `/cars/price/by-carbody-washingcenter/${payload.washingCenterId}/${payload.carBodyId}`,
+      )
     } catch (e) {
       return e.response ? e.response : null
     }
@@ -105,6 +121,20 @@ export const carsService = {
   updateCar: async payload => {
     try {
       return await instance.put(`/cars/edit/${payload.id}`, payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  createOrder: async payload => {
+    try {
+      return await instance.post('cars/order/create', payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  getUserOrderList: async () => {
+    try {
+      return await instance.get('cars/order/my/')
     } catch (e) {
       return e.response ? e.response : null
     }

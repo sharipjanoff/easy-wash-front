@@ -8,14 +8,14 @@
         <template #empty> Нет активных резерваций </template>
         <template #loading> Данные загружаются, подождите... </template>
         <Column
-          field="time"
-          header="Время"
+          sortable
+          field="dateTime"
+          header="Дата и время"
           style="width: 25%; text-align: center"
         >
           <template #body="{ data }">
             <div class="time-card">
-              <div class="time-card__item">{{ data.time.start }}</div>
-              <div class="time-card__item">{{ data.time.end }}</div>
+              <div class="time-card__item">{{ data.dateTime }}</div>
             </div>
           </template>
         </Column>
@@ -25,28 +25,25 @@
           style="width: 75%; text-align: left"
         >
           <template #body="{ data }">
-            <div
-              class="detail-card"
-              :class="{ upcoming: reservations.indexOf(data) === 0 }"
-            >
+            <div class="detail-card upcoming">
               <div class="detail-card__item">
                 <h4>
-                  {{ data.detail.service }}
+                  Машина -
+                  {{
+                    data.car.model + ' ' + data.car.mark + ' ' + data.car.vrp
+                  }}
                 </h4>
               </div>
               <div class="detail-card__item">
-                {{ data.detail.name }}
+                Цена- {{ data.carWashPrice.cost }}
               </div>
-              <br />
               <div class="detail-card__item">
                 <i class="pi pi-map-marker" style="font-size: 1rem"></i>
-                {{ data.detail.address }}
+                Автомойка - {{ data.carWashBox.name }}
               </div>
-              <div class="detail-card__item">
-                <i class="pi pi-user" style="font-size: 1rem"></i>
-
-                {{ data.detail.worker }}
-              </div>
+              <!--              <div class="detail-card__item">-->
+              <!--                <i class="pi pi-user" style="font-size: 1rem"></i>-->
+              <!--              </div>-->
             </div>
           </template>
         </Column>
@@ -56,36 +53,15 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+import { carsService } from '@/plugins/axios/http/cars'
 
-const reservations = reactive([
-  {
-    time: {
-      start: '11:00',
-      end: '12:00',
-    },
-    detail: {
-      name: 'Навигатор',
-      address: 'Пушкина д. 2',
-      service: 'Мойка',
-      worker: 'Сергей',
-    },
-  },
-  {
-    time: {
-      start: '13:00',
-      end: '12:00',
-    },
-    detail: {
-      name: 'Навигатор',
-      address: 'Пушкина д. 2',
-      service: 'Мойка',
-      worker: 'Сергей',
-    },
-  },
-])
+const reservations = ref(null)
+onBeforeMount(async () => {
+  reservations.value = (await carsService.getUserOrderList())?.data
+})
 </script>
 
 <style scoped lang="scss">
@@ -128,6 +104,10 @@ const reservations = reactive([
   align-items: center;
 }
 .detail-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 7px;
   height: 100%;
   width: 90%;
   padding: 10px;
@@ -136,6 +116,13 @@ const reservations = reactive([
   background: var(--secondary-color);
   color: #000;
   border-radius: 10px;
+
+  &__item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+  }
 }
 .upcoming {
   background: var(--primary-color);
