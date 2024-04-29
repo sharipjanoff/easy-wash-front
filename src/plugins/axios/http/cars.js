@@ -34,7 +34,7 @@ export const carsService = {
   },
   addCarWashToFavorites: async payload => {
     try {
-      return await instance.post('/cars/washing-center/favorite', payload)
+      return await instance.post(`/cars/washing-center/favorite/${payload.id}`)
     } catch (e) {
       return e.response ? e.response : null
     }
