@@ -59,7 +59,6 @@ const carForm = reactive({
     Object.assign(carForm.data, data)
     carForm.loading = true
     const createCarBodyResponse = await carsService.createCar(data)
-    console.log(createCarBodyResponse)
     if (createCarBodyResponse?.data?.status === 1) {
       toast.add({
         severity: 'success',
@@ -80,7 +79,6 @@ const carDetailDialog = reactive({
   loading: false,
   error: '',
   updateCar: markRaw(async data => {
-    console.log(data)
     carDetailDialog.loading = true
 
     const updateWashingCenterResponse = await carsService.updateCar(data)

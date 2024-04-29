@@ -95,11 +95,10 @@ const button = reactive({
     return false
   }),
   action: markRaw(() => {
-    console.log(priceData)
     emit('sendRequest', {
       cost: priceData.cost,
       washingCenterId: priceData.washingCenter.id,
-      carBodyTypeId: priceData.carBody.id,
+      carBodyId: priceData.carBody.id,
     })
   }),
 })

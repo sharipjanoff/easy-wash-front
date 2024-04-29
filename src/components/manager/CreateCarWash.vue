@@ -17,6 +17,22 @@
     </div>
     <div class="create-form__item">
       <input-float
+        :is-calendar="true"
+        v-model="carWashData.startTime"
+        id="startTime"
+        label="Время открытия (Пример - 09:00)"
+      />
+    </div>
+    <div class="create-form__item">
+      <input-float
+        :is-calendar="true"
+        v-model="carWashData.endTime"
+        id="endTime"
+        label="Время открытия (Пример - 21:00)"
+      />
+    </div>
+    <div class="create-form__item">
+      <input-float
         v-model="carWashData.phone"
         id="phone"
         label="Номер телефона"
@@ -30,11 +46,7 @@
       />
     </div>
     <div class="create-form__item">
-      <p-button
-        @click="button.action"
-        :disabled="button.disabled"
-        :loading="button.loading"
-      >
+      <p-button @click="button.action" :loading="button.loading">
         Создать
       </p-button>
       <p class="error" v-if="button.error.length || props.error">
@@ -58,7 +70,7 @@ const props = defineProps({
     },
   },
   error: {
-    type: String || null,
+    type: [String, null],
     required: false,
     default: () => {
       return null
@@ -74,6 +86,8 @@ const carWashData = reactive({
   lat: null,
   phone: null,
   description: null,
+  startTime: null,
+  endTime: null,
 })
 
 const button = reactive({
@@ -93,13 +107,12 @@ const button = reactive({
     return false
   }),
   action: markRaw(() => {
+    carWashData.startTime = normalizeTime(carWashData.startTime)
+    carWashData.endTime = normalizeTime(carWashData.endTime)
     emit('sendRequest', carWashData)
-    carWashData.name = null
-    carWashData.location = null
-    carWashData.lon = null
-    carWashData.lat = null
-    carWashData.phone = null
-    carWashData.description = null
+    for (const [key, value] of Object.entries(carWashData)) {
+      carWashData[key] = null
+    }
   }),
 })
 
@@ -108,6 +121,12 @@ const validatePhone = phone => {
     phone &&
     (phone.startsWith('+7') || phone.startsWith('77') || phone.startsWith('87'))
   )
+}
+const normalizeTime = strDate => {
+  const date = new Date(strDate)
+  const hours = ('0' + date.getHours()).slice(-2) // Pad with leading zero if necessary
+  const minutes = ('0' + date.getMinutes()).slice(-2) // Pad with leading zero if necessary
+  return `${hours}:${minutes}:00`
 }
 </script>
 

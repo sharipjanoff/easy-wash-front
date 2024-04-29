@@ -170,9 +170,7 @@ const items2 = [
 ]
 
 const handleReservation = info => {
-  console.log(info)
   currentService.data = info
-  console.log(currentService.data)
   router.push('/reservation')
 }
 const handleSearch = () => {

@@ -118,8 +118,6 @@ onBeforeMount(() => {
     newData,
     ...existingKeys.map(key => ({ [key]: props.data[key] })),
   )
-  console.log(props.data)
-  console.log(newData)
 })
 </script>
 

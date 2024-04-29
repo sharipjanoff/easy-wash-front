@@ -32,7 +32,7 @@
                     <h3>Время работы</h3>
                   </div>
                   <div class="info__value">
-                    {{ data.workTime }}
+                    {{ data.startTime }} - {{ data.endTime }}
                   </div>
                 </div>
               </div>
@@ -106,7 +106,6 @@ const props = defineProps({
     required: true,
   },
 })
-console.log(props.data)
 const emit = defineEmits(['action', 'rate', 'start-reservation'])
 
 const ratingValue = ref(null)

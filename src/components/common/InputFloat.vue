@@ -10,6 +10,25 @@
         :feedback="false"
       />
     </template>
+    <template v-else-if="props.isCalendar">
+      <Calendar
+        v-bind="$attrs"
+        show-icon
+        icon-display="input"
+        time-only
+        :id="props.id"
+        class="input"
+        type="text"
+        hour-format="24"
+      >
+        <template #inputicon="{ clickCallback }">
+          <InputIcon
+            class="pi pi-clock cursor-pointer"
+            @click="clickCallback"
+          />
+        </template>
+      </Calendar>
+    </template>
     <template v-else>
       <input-text :id="props.id" class="input" type="text" v-bind="$attrs" />
     </template>
@@ -24,6 +43,8 @@
 <script setup>
 import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
+import Calendar from 'primevue/calendar'
+import InputIcon from 'primevue/inputicon'
 
 const props = defineProps({
   id: {
@@ -47,6 +68,13 @@ const props = defineProps({
   inputIcon: {
     type: Boolean,
     default() {
+      return false
+    },
+  },
+  isCalendar: {
+    type: Boolean,
+    required: false,
+    default: () => {
       return false
     },
   },

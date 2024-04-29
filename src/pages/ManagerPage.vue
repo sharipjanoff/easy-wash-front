@@ -81,6 +81,8 @@ const createCarWash = reactive({
     lat: null,
     phone: null,
     description: null,
+    startTime: null,
+    endTime: null,
   },
   loading: false,
   error: '',
@@ -143,13 +145,12 @@ const createPrice = reactive({
   data: {
     cost: null,
     washingCenterId: null,
-    carBodyTypeId: null,
+    carBodyId: null,
   },
   loading: false,
   error: '',
   action: markRaw(async data => {
     Object.assign(createPrice.data, data)
-    console.log(createPrice.data)
     createPrice.loading = true
 
     const createPriceResponse = await carsService.createPrice(createPrice.data)
@@ -230,7 +231,6 @@ const carWashDetailDialog = reactive({
 const openCarWashRowDetail = rowData => {
   carWashDetailDialog.rowData = rowData
   carWashDetailDialog.visible = true
-  console.log(carWashDetailDialog)
 }
 
 onBeforeMount(async () => {
@@ -239,7 +239,6 @@ onBeforeMount(async () => {
   }
   carWashList.value = (await carsService.getMyWashingCentersList())?.data
   carBodyList.value = (await carsService.getCarBodyList())?.data
-  console.log(carBodyList.value)
 })
 </script>
 
