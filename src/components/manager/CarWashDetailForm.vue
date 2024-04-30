@@ -1,12 +1,26 @@
 <template>
   <form class="car-wash-detail-form">
     <template v-for="(value, key) in newData" :key="key">
-      <template v-if="displayItems.includes(key)">
+      <template v-if="displayItems.includes(key) && !key.includes('Time')">
         <div
           class="car-wash-detail-form__item"
           v-if="key !== 'carWashBoxes' && key !== 'carWashPrice'"
         >
           <input-float
+            v-model="newData[key]"
+            :id="key"
+            :label="keyTranslationMap[key]"
+            :value="value"
+          />
+        </div>
+      </template>
+      <template v-if="displayItems.includes(key) && key.includes('Time')">
+        <div
+          class="car-wash-detail-form__item"
+          v-if="key !== 'carWashBoxes' && key !== 'carWashPrice'"
+        >
+          <input-float
+            :is-calendar="true"
             v-model="newData[key]"
             :id="key"
             :label="keyTranslationMap[key]"
@@ -87,6 +101,8 @@ const displayItems = [
   'description',
   'carWashPrice',
   'carWashBoxes',
+  'startTime',
+  'endTime',
 ]
 const newData = reactive({
   id: null,
@@ -96,6 +112,8 @@ const newData = reactive({
   lat: null,
   phone: null,
   description: null,
+  startTime: null,
+  endTime: null,
   carWashBoxes: [],
   carWashPrice: [],
 })
@@ -108,6 +126,8 @@ const keyTranslationMap = {
   description: 'Описание',
   carWashBoxes: 'Список боксов автомойки',
   carWashPrice: 'Список цен на услуги',
+  startTime: 'Время открытия',
+  endTime: 'Время закрытия',
 }
 const carWashBoxes = ref([])
 const button = reactive({
@@ -127,6 +147,15 @@ const button = reactive({
     return false
   }),
   action: markRaw(async () => {
+    console.log(newData)
+    newData.startTime =
+      newData.startTime !== props.data.startTime
+        ? normalizeTime(newData.startTime)
+        : props.data.startTime
+    newData.endTime =
+      newData.endTime !== props.data.endTime
+        ? normalizeTime(newData.endTime)
+        : props.data.endTime
     newData.carWashBoxes = [...carWashBoxes.value]
     emit('updateWashingCenter', newData)
   }),
@@ -137,6 +166,13 @@ const validatePhone = phone => {
     phone &&
     (phone.startsWith('+7') || phone.startsWith('77') || phone.startsWith('87'))
   )
+}
+
+const normalizeTime = strDate => {
+  const date = new Date(strDate)
+  const hours = ('0' + date.getHours()).slice(-2) // Pad with leading zero if necessary
+  const minutes = ('0' + date.getMinutes()).slice(-2) // Pad with leading zero if necessary
+  return `${hours}:${minutes}:00`
 }
 
 onBeforeMount(() => {

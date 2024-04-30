@@ -1,7 +1,12 @@
 <template>
   <div class="favorite-page">
-    <template v-if="favoritesList.length > 0">
-      <div class="favorite-page__item">Here will be list</div>
+    <div class="page-header">
+      <h1 class="page-header__title">Список избранных</h1>
+    </div>
+    <template v-if="favoritesList">
+      <template v-for="item in favoritesList">
+        <div class="favorite-page__item">{{ item }}</div>
+      </template>
     </template>
     <template v-else>
       <div class="favorite-page__item">
@@ -14,10 +19,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { carsService } from '@/plugins/axios/http/cars'
 import favoritesSvg from '@/assets/icons/favorites.svg'
 
-const favoritesList = ref([])
+const favoritesList = ref(null)
+
+onMounted(async () => {
+  favoritesList.value = (await carsService.getFavoriteCarWash())?.data
+})
 </script>
 
 <style scoped lang="scss">
@@ -30,6 +40,15 @@ const favoritesList = ref([])
   padding: 25px;
   background: #f7f8fa;
   overflow-y: scroll;
+
+  .page-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: 10px;
+    background: #fff;
+  }
 
   &__item {
     display: flex;
