@@ -4,6 +4,7 @@
       :is="currenStep"
       :data="currentServiceStore.data"
       :car-list="carList"
+      :worker-list="workerList"
       :price="currentCarPrice"
       :car-box-list="carBoxList"
       :reservation-data="reservationData"
@@ -29,9 +30,11 @@ import FinishStep from '@/components/reservation/FinishStep.vue'
 
 const currentServiceStore = useCurrentServiceStore()
 const currentMapPositionStore = useCurrentMapPositionStore()
+console.log(currentServiceStore.data)
 const toast = useToast()
 const carList = ref(null)
 const carBoxList = ref(null)
+const workerList = ref(null)
 const current = ref('information')
 const currentCarPrice = ref(null)
 const reservationData = ref(null)
@@ -94,6 +97,7 @@ const reserve = async data => {
     carWashPriceId: currentCarPrice.value.id,
     carWashBoxId: data.selectedCarBox.id,
     carId: data.selectedCar.id,
+    carWashWorkerId: data.selectedWorker.id,
     dateTime: normalizedDate,
   }
   const response = await carsService.createOrder(payload)
@@ -144,6 +148,11 @@ onBeforeMount(async () => {
   carList.value = (await carsService.getMyCarList())?.data
   carBoxList.value = (
     await carsService.getBoxesByWashingCenterId({
+      id: currentServiceStore.data.id,
+    })
+  )?.data
+  workerList.value = (
+    await carsService.getWorkersByWashingCenterId({
       id: currentServiceStore.data.id,
     })
   )?.data

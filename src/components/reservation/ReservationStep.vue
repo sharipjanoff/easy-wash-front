@@ -51,6 +51,14 @@
         placeholder="Выберите бокс"
         style="width: 300px; text-align: left"
       />
+      <h2>Выберите работтника</h2>
+      <p-dropdown
+        v-model="selectedWorker"
+        :options="workerList"
+        option-label="fio"
+        placeholder="Выберите работника"
+        style="width: 300px; text-align: left"
+      />
       <p-button
         :disabled="disabled"
         class="button"
@@ -61,6 +69,7 @@
             selectedTime: selectedTime.range,
             selectedCar,
             selectedCarBox,
+            selectedWorker,
           })
         "
       />
@@ -75,6 +84,10 @@ import PButton from 'primevue/button'
 import PDropdown from 'primevue/dropdown'
 
 const props = defineProps({
+  data: {
+    type: Object,
+    required: true,
+  },
   carList: {
     type: [Array, null],
     required: true,
@@ -83,6 +96,13 @@ const props = defineProps({
     },
   },
   carBoxList: {
+    type: [Array, null],
+    required: true,
+    default: () => {
+      return null
+    },
+  },
+  workerList: {
     type: [Array, null],
     required: true,
     default: () => {
@@ -98,63 +118,45 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(['dateChange', 'getPrice'])
+console.log(props.workerList)
 
 const today = ref(new Date())
 const date = ref(today)
 const selectedTime = ref(null)
 const selectedCar = ref(null)
 const selectedCarBox = ref(null)
+const selectedWorker = ref(null)
+const startTime = props.data.startTime
+const endTime = props.data.endTime
 const disabled = computed(() => {
   if (!date.value || !selectedCar.value || !selectedTime.value) return true
   return false
 })
-const timeTable = reactive([
-  {
-    range: '09:00 - 10:00',
-    available: true,
-    selected: false,
-  },
-  {
-    range: '10:00 - 11:00',
-    available: true,
-    selected: false,
-  },
-  {
-    range: '11:00 - 12:00',
-    available: true,
-    selected: false,
-  },
-  {
-    range: '12:00 - 13:00',
-    available: true,
-    selected: false,
-  },
-  {
-    range: '14:00 - 15:00',
-    available: true,
-    selected: false,
-  },
-  {
-    range: '16:00 - 17:00',
-    available: true,
-    selected: false,
-  },
-  {
-    range: '18:00 - 19:00',
-    available: true,
-    selected: false,
-  },
-  {
-    range: '19:00 - 20:00',
-    available: true,
-    selected: false,
-  },
-  {
-    range: '20:00 - 21:00',
-    available: true,
-    selected: false,
-  },
-])
+const timeTable = reactive(generateTimeTable(startTime, endTime))
+
+function generateTimeTable(startTime, endTime) {
+  const timeTable = []
+  let currentTime = new Date(`1970-01-01T${startTime}`)
+  const end = new Date(`1970-01-01T${endTime}`)
+
+  while (currentTime < end) {
+    const nextTime = new Date(currentTime)
+    nextTime.setHours(currentTime.getHours() + 1)
+
+    const currentTimeString = currentTime.toTimeString().substr(0, 5)
+    const nextTimeString = nextTime.toTimeString().substr(0, 5)
+
+    timeTable.push({
+      range: `${currentTimeString} - ${nextTimeString}`,
+      available: true,
+      selected: false,
+    })
+
+    currentTime = nextTime
+  }
+
+  return timeTable
+}
 </script>
 
 <style scoped lang="scss">

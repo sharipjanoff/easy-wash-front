@@ -27,6 +27,7 @@
           <template #body="{ data }">
             <div class="detail-card upcoming">
               <div class="detail-card__item">
+                <i class="pi pi-car" style="font-size: 1rem"></i>
                 <h4>
                   Машина -
                   {{
@@ -35,11 +36,20 @@
                 </h4>
               </div>
               <div class="detail-card__item">
-                Цена- {{ data.carWashPrice.cost }}
+                <i class="pi pi-map-marker" style="font-size: 1rem"></i>
+                Автомойка - {{ data.washingCenter }}
               </div>
               <div class="detail-card__item">
-                <i class="pi pi-map-marker" style="font-size: 1rem"></i>
-                Автомойка - {{ data.carWashBox.name }}
+                <i class="pi pi-user" style="font-size: 1rem"></i>
+                Работник - {{ data.carWashWorker.fio }}
+              </div>
+              <div class="detail-card__item">
+                <i class="pi pi-phone" style="font-size: 1rem"></i>
+                Номер работника - {{ data.carWashWorker.phone }}
+              </div>
+              <div class="detail-card__item">
+                <i class="pi pi-money-bill" style="font-size: 1rem"></i>
+                Цена- {{ data.carWashPrice.cost }}
               </div>
               <!--              <div class="detail-card__item">-->
               <!--                <i class="pi pi-user" style="font-size: 1rem"></i>-->

@@ -67,6 +67,13 @@ export const carsService = {
       return e.response ? e.response : null
     }
   },
+  getWorkersByWashingCenterId: async payload => {
+    try {
+      return await instance.get(`/cars/worker/list/${payload.id}`, payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
   createFixBox: async payload => {
     try {
       return await instance.post('/cars/fix-box/create', payload)

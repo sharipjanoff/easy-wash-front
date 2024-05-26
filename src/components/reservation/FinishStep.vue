@@ -32,6 +32,7 @@ const normalizedReservationData = {
   washingCenterName: props.reservationData.washingCenter.name,
   washingCenterAddress: props.reservationData.washingCenter.location,
   washingCenterBox: props.reservationData.selectedCarBox.name,
+  washingCenterWorker: props.reservationData.selectedWorker.fio,
 }
 const keyTranslationMap = {
   date: 'Дата и время',
@@ -39,6 +40,7 @@ const keyTranslationMap = {
   washingCenterName: 'Название автомойки',
   washingCenterAddress: 'Адрес автомойки',
   washingCenterBox: 'Название бокса',
+  washingCenterWorker: 'ФИО работника',
 }
 </script>
 
