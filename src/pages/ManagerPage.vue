@@ -54,6 +54,8 @@
           @send-request="createPrice.action($event)"
         />
       </div>
+    </div>
+    <div class="item-group">
       <div class="item-group__item">
         <create-fix-box
           v-if="carWashList"
@@ -70,6 +72,15 @@
           @send-request="createFixPrice.action($event)"
         />
       </div>
+      <div class="item-group__item">
+        <create-worker
+          v-if="carWashList"
+          :car-wash-list="carWashList"
+          :loading="createWorker.loading"
+          :error="createWorker.error"
+          @send-request="createWorker.action($event)"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -79,6 +90,7 @@ import { markRaw, onBeforeMount, reactive, ref } from 'vue'
 import router from '@/plugins/router'
 import { useUserStore } from '@/stores/user'
 import { carsService } from '@/plugins/axios/http/cars'
+import { useToast } from 'primevue/usetoast'
 import Dialog from 'primevue/dialog'
 import CarWashList from '@/components/manager/CarWashList.vue'
 import CreateCarWash from '@/components/manager/CreateCarWash.vue'
@@ -87,7 +99,7 @@ import CreatePrice from '@/components/manager/CreatePrice.vue'
 import CarWashDetailDialog from '@/components/manager/CarWashDetailForm.vue'
 import CreateFixBox from '@/components/manager/CreateFixBox.vue'
 import CreateFixPrice from '@/components/manager/CreateFixPrice.vue'
-import { useToast } from 'primevue/usetoast'
+import CreateWorker from '@/components/manager/CreateWorker.vue'
 
 const userStore = useUserStore()
 const toast = useToast()
@@ -190,7 +202,7 @@ const createFixBox = reactive({
       })
     }
 
-    createBox.loading = false
+    createFixBox.loading = false
   }),
 })
 const createPrice = reactive({
@@ -255,12 +267,46 @@ const createFixPrice = reactive({
       toast.add({
         severity: 'success',
         summary: 'Упешно!',
-        detail: `Цена была установлена!`,
+        detail: `Услуга была создана!`,
         life: 3000,
       })
     }
 
     createPrice.loading = false
+  }),
+})
+const createWorker = reactive({
+  data: {
+    firstName: null,
+    lastName: null,
+    phone: null,
+    washingCenterId: null,
+  },
+  loading: false,
+  error: '',
+  action: markRaw(async data => {
+    Object.assign(createWorker.data, data)
+    createWorker.loading = true
+
+    const createWorkerResponse = await carsService.createWorker(
+      createWorker.data,
+    )
+
+    if (createWorkerResponse?.data?.status === 2) {
+      createFixBox.error = `Ошибка при создании бокса - ${createWorkerResponse?.data?.message}`
+      createFixBox.loading = false
+      return
+    } else {
+      carWashList.value = (await carsService.getMyWashingCentersList())?.data
+      toast.add({
+        severity: 'success',
+        summary: 'Упешно!',
+        detail: `Работник "${createWorker.data.firstName}" был создан!`,
+        life: 3000,
+      })
+    }
+
+    createWorker.loading = false
   }),
 })
 const carWashDetailDialog = reactive({
