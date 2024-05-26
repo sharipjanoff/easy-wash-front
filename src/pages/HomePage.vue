@@ -259,9 +259,16 @@ onBeforeMount(async () => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    gap: 5px;
+    * {
+      text-align: center;
+    }
     &__image {
       width: 150px;
       height: 150px;
+      border-radius: 5%;
       img {
         width: 100%;
         height: 100%;

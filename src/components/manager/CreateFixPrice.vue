@@ -1,21 +1,28 @@
 <template>
-  <div class="create-box">
-    <div class="create-box__item">
-      <h2>Создание бокса автомойки</h2>
+  <div class="create-price">
+    <div class="create-price__item">
+      <h2>Настройка цен на услуги СТО</h2>
     </div>
-    <div class="create-box__item">
-      <input-float v-model="boxData.name" id="name" label="Название бокса" />
-    </div>
-    <div class="create-box__item">
+    <div class="create-price__item">
       <p-dropdown
-        v-model="boxData.carWash"
+        v-model="priceData.washingCenter"
         :options="carWashList"
         option-label="name"
         placeholder="Выберите станцию"
         style="width: 300px; text-align: left"
       />
     </div>
+    <div class="create-price__item">
+      <input-float
+        v-model="priceData.service"
+        id="service"
+        label="Вид услуги"
+      />
+    </div>
     <div class="create-box__item">
+      <input-float v-model="priceData.cost" id="cost" label="Цена" />
+    </div>
+    <div class="create-price__item">
       <p-button
         @click="button.action"
         :disabled="button.disabled"
@@ -61,16 +68,16 @@ const props = defineProps({
 })
 const emit = defineEmits(['sendRequest'])
 
-const boxData = reactive({
-  name: null,
-  carWash: null,
+const priceData = reactive({
+  washingCenter: null,
+  service: null,
+  cost: null,
 })
-
 const button = reactive({
   error: '',
   loading: false,
   disabled: computed(() => {
-    const fields = Object.values(boxData).slice()
+    const fields = Object.values(priceData).slice()
     if (fields.includes(null) || fields.includes('')) {
       button.error = 'Заполните все поля'
       return true
@@ -80,17 +87,16 @@ const button = reactive({
   }),
   action: markRaw(() => {
     emit('sendRequest', {
-      name: boxData.name,
-      washingCenterId: boxData.carWash.id,
+      cost: priceData.cost,
+      washingCenterId: priceData.washingCenter.id,
+      service: priceData.service,
     })
-    boxData.name = null
-    boxData.carWash = null
   }),
 })
 </script>
 
 <style scoped lang="scss">
-.create-box {
+.create-price {
   text-align: center;
   display: flex;
   flex-direction: column;

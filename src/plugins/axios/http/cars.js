@@ -60,6 +60,13 @@ export const carsService = {
       return e.response ? e.response : null
     }
   },
+  createFixBox: async payload => {
+    try {
+      return await instance.post('/cars/fix-box/create', payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
   updateBox: async payload => {
     try {
       return await instance.put(`/cars/box/edit/${payload.id}`, payload)
@@ -77,6 +84,19 @@ export const carsService = {
   createPrice: async payload => {
     try {
       return await instance.post('/cars/price/create', payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  createFixPrice: async data => {
+    const payload = {
+      type: 'a',
+      ruName: data.service,
+      washingCenterId: data.washingCenterId,
+      cost: data.cost,
+    }
+    try {
+      return await instance.post('/cars/car-fix/create', payload)
     } catch (e) {
       return e.response ? e.response : null
     }

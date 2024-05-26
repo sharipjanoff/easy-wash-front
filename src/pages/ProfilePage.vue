@@ -142,16 +142,15 @@ const changeUserDataForm = reactive({
 })
 
 const upload = async evt => {
-  const file = evt.target.files[0] // Get the selected file
+  const file = evt.target.files[0]
   if (file && file.type.startsWith('image/')) {
-    // Check if the file is an image
-    const reader = new FileReader() // Create a new FileReader instance
+    const reader = new FileReader()
 
     reader.onload = e => {
-      userImage.value = e.target.result // Update the userImage ref with the base64 encoded string
+      userImage.value = e.target.result
     }
 
-    reader.readAsDataURL(file) // Read the file and convert it to a base64 encoded string
+    reader.readAsDataURL(file)
   }
 }
 const handleClick = () => {

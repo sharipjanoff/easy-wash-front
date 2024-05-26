@@ -1,7 +1,7 @@
 <template>
   <form class="create-form">
     <div class="create-form__item">
-      <h2>Создание автомойки</h2>
+      <h2>Создание станции обслуживания</h2>
     </div>
     <div class="create-form__item">
       <input-float v-model="carWashData.name" id="name" label="Название" />
@@ -46,7 +46,11 @@
       />
     </div>
     <div class="create-form__item">
-      <p-button @click="button.action" :loading="button.loading">
+      <p-button
+        @click="button.action"
+        :loading="button.loading"
+        :disabled="button.disabled"
+      >
         Создать
       </p-button>
       <p class="error" v-if="button.error.length || props.error">

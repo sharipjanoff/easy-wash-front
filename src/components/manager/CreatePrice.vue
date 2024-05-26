@@ -8,7 +8,7 @@
         v-model="priceData.washingCenter"
         :options="carWashList"
         option-label="name"
-        placeholder="Выберите автомойку"
+        placeholder="Выберите станцию"
         style="width: 300px; text-align: left"
       />
     </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="car-wash-list">
-    <h2>Список ваших автомоек</h2>
+    <h2>Список ваших станций обслуживания</h2>
     <data-table
       :loading="props.loading"
       class="table"

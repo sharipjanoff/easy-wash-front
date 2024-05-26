@@ -1,7 +1,7 @@
 <template>
   <div class="create-box">
     <div class="create-box__item">
-      <h2>Создание бокса автомойки</h2>
+      <h2>Создание бокса СТО</h2>
     </div>
     <div class="create-box__item">
       <input-float v-model="boxData.name" id="name" label="Название бокса" />

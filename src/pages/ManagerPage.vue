@@ -3,55 +3,73 @@
     <div class="page-header">
       <h1 class="page-header__title">Менеджерская панель</h1>
     </div>
-    <div class="manager-page__item">
-      <car-wash-list
-        :loading="!carWashList"
-        :data="carWashList"
-        @row-click="openCarWashRowDetail($event.data)"
-      />
-      <Dialog
-        v-model:visible="carWashDetailDialog.visible"
-        :modal="true"
-        header="Редактировать данные об автомойке"
-        style="width: 50vw"
-        :breakpoints="{ '1280px': '75vw', '960px': '85vw', '640px': '95vw' }"
-      >
-        <car-wash-detail-dialog
-          :data="carWashDetailDialog.rowData"
-          :loading="carWashDetailDialog.loading"
-          :error="carWashDetailDialog.error"
-          @update-washing-center="
-            carWashDetailDialog.updateWashingCenter($event)
-          "
-          @update-box="carWashDetailDialog.updateBox($event)"
+    <div class="item-group">
+      <div class="item-group__item">
+        <car-wash-list
+          :loading="!carWashList"
+          :data="carWashList"
+          @row-click="openCarWashRowDetail($event.data)"
         />
-      </Dialog>
+        <Dialog
+          v-model:visible="carWashDetailDialog.visible"
+          :modal="true"
+          header="Редактировать данные о станции обслуживания"
+          style="width: 50vw"
+          :breakpoints="{ '1280px': '75vw', '960px': '85vw', '640px': '95vw' }"
+        >
+          <car-wash-detail-dialog
+            :data="carWashDetailDialog.rowData"
+            :loading="carWashDetailDialog.loading"
+            :error="carWashDetailDialog.error"
+            @update-washing-center="
+              carWashDetailDialog.updateWashingCenter($event)
+            "
+            @update-box="carWashDetailDialog.updateBox($event)"
+          />
+        </Dialog>
+      </div>
     </div>
-    <div class="manager-page__item">
-      <create-car-wash
-        :loading="createCarWash.loading"
-        :error="createCarWash.error"
-        @send-request="createCarWash.action($event)"
-      />
-    </div>
-    <div class="manager-page__item">
-      <create-box
-        v-if="carWashList"
-        :car-wash-list="carWashList"
-        :loading="createBox.loading"
-        :error="createBox.error"
-        @send-request="createBox.action($event)"
-      />
-    </div>
-    <div class="manager-page__item">
-      <create-price
-        v-if="carWashList && carBodyList"
-        :car-wash-list="carWashList"
-        :car-body-list="carBodyList"
-        :loading="createPrice.loading"
-        :error="createPrice.error"
-        @send-request="createPrice.action($event)"
-      />
+    <div class="item-group">
+      <div class="item-group__item">
+        <create-car-wash
+          :loading="createCarWash.loading"
+          :error="createCarWash.error"
+          @send-request="createCarWash.action($event)"
+        />
+      </div>
+      <div class="item-group__item">
+        <create-box
+          v-if="carWashList"
+          :car-wash-list="carWashList"
+          :loading="createBox.loading"
+          :error="createBox.error"
+          @send-request="createBox.action($event)"
+        />
+        <create-price
+          v-if="carWashList && carBodyList"
+          :car-wash-list="carWashList"
+          :car-body-list="carBodyList"
+          :loading="createPrice.loading"
+          :error="createPrice.error"
+          @send-request="createPrice.action($event)"
+        />
+      </div>
+      <div class="item-group__item">
+        <create-fix-box
+          v-if="carWashList"
+          :car-wash-list="carWashList"
+          :loading="createFixBox.loading"
+          :error="createFixBox.error"
+          @send-request="createFixBox.action($event)"
+        />
+        <create-fix-price
+          v-if="carWashList"
+          :car-wash-list="carWashList"
+          :loading="createFixPrice.loading"
+          :error="createFixPrice.error"
+          @send-request="createFixPrice.action($event)"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -67,6 +85,8 @@ import CreateCarWash from '@/components/manager/CreateCarWash.vue'
 import CreateBox from '@/components/manager/CreateBox.vue'
 import CreatePrice from '@/components/manager/CreatePrice.vue'
 import CarWashDetailDialog from '@/components/manager/CarWashDetailForm.vue'
+import CreateFixBox from '@/components/manager/CreateFixBox.vue'
+import CreateFixPrice from '@/components/manager/CreateFixPrice.vue'
 import { useToast } from 'primevue/usetoast'
 
 const userStore = useUserStore()
@@ -125,7 +145,7 @@ const createBox = reactive({
     const createBoxResponse = await carsService.createBox(createBox.data)
 
     if (createBoxResponse?.data?.status === 2) {
-      createBox.error = `Ошибка при создании бокса - ${createBox?.data?.message}`
+      createBox.error = `Ошибка при создании бокса - ${createBoxResponse?.data?.message}`
       createBox.loading = false
       return
     } else {
@@ -134,6 +154,38 @@ const createBox = reactive({
         severity: 'success',
         summary: 'Упешно!',
         detail: `Бокс "${createBox.data.name}" был создан!`,
+        life: 3000,
+      })
+    }
+
+    createBox.loading = false
+  }),
+})
+const createFixBox = reactive({
+  data: {
+    name: null,
+    washingCenterId: null,
+  },
+  loading: false,
+  error: '',
+  action: markRaw(async data => {
+    Object.assign(createFixBox.data, data)
+    createFixBox.loading = true
+
+    const createFixBoxResponse = await carsService.createFixBox(
+      createFixBox.data,
+    )
+
+    if (createFixBoxResponse?.data?.status === 2) {
+      createFixBox.error = `Ошибка при создании бокса - ${createFixBoxResponse?.data?.message}`
+      createFixBox.loading = false
+      return
+    } else {
+      carWashList.value = (await carsService.getMyWashingCentersList())?.data
+      toast.add({
+        severity: 'success',
+        summary: 'Упешно!',
+        detail: `Бокс "${createFixBox.data.name}" был создан!`,
         life: 3000,
       })
     }
@@ -159,8 +211,44 @@ const createPrice = reactive({
       createPriceResponse?.data?.status === 2 ||
       createPriceResponse?.data?.status === 500
     ) {
-      createBox.error = `Ошибка при создании цены - ${createPriceResponse?.data?.message}`
-      createBox.loading = false
+      createPrice.error = `Ошибка при создании цены - ${createPriceResponse?.data?.message}`
+      createPrice.loading = false
+      return
+    } else {
+      carWashList.value = (await carsService.getMyWashingCentersList())?.data
+      toast.add({
+        severity: 'success',
+        summary: 'Упешно!',
+        detail: `Цена была установлена!`,
+        life: 3000,
+      })
+    }
+
+    createPrice.loading = false
+  }),
+})
+const createFixPrice = reactive({
+  data: {
+    cost: null,
+    washingCenterId: null,
+    service: null,
+  },
+  loading: false,
+  error: '',
+  action: markRaw(async data => {
+    Object.assign(createFixPrice.data, data)
+    createFixPrice.loading = true
+
+    const createFixPriceResponse = await carsService.createFixPrice(
+      createFixPrice.data,
+    )
+
+    if (
+      createFixPriceResponse?.data?.status === 2 ||
+      createFixPriceResponse?.data?.status === 500
+    ) {
+      createFixPrice.error = `Ошибка при создании цены - ${createFixPriceResponse?.data?.message}`
+      createFixPrice.loading = false
       return
     } else {
       carWashList.value = (await carsService.getMyWashingCentersList())?.data
@@ -253,6 +341,36 @@ onBeforeMount(async () => {
   background: #f7f8fa;
   overflow-y: scroll;
 
+  .item-group {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    background: #fff;
+    border-radius: 10px;
+
+    &__item:not(:last-child) {
+      border-right: 2px solid #eee;
+    }
+
+    &__item {
+      align-self: flex-start;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding: 20px;
+    }
+
+    &__item * {
+      margin-bottom: auto;
+    }
+  }
+
   .page-header {
     width: 100%;
     display: flex;
@@ -261,16 +379,16 @@ onBeforeMount(async () => {
     border-radius: 10px;
     background: #fff;
   }
+}
 
-  &__item {
-    display: flex;
+@media screen and (max-width: 1200px) {
+  .item-group {
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding: 20px;
-    border-radius: 10px;
-    background: #fff;
+
+    &__item {
+      border-right: none;
+      border-bottom: 2px solid #eee;
+    }
   }
 }
 </style>
