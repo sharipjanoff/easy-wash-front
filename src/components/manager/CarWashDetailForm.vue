@@ -43,16 +43,35 @@
       </p>
     </div>
     <div class="car-wash-detail-form__item">
-      <h4>Список Боксов</h4>
+      <h4>Список Боксов Мойки</h4>
       <template v-if="newData.carWashBoxes.length > 0">
         <template v-for="(item, idx) of newData.carWashBoxes" :key="idx">
           <input-float
             v-model="carWashBoxes[idx].name"
             :id="carWashBoxes[idx].id"
-            :label="`Название бокса № ${idx}`"
+            :label="`Название бокса № ${idx + 1}`"
             :value="carWashBoxes[idx].name"
           />
           <p-button class="button" @click="emit('updateBox', carWashBoxes[idx])"
+            >Обновить бокс</p-button
+          >
+        </template>
+      </template>
+      <template v-else>Список пуст</template>
+    </div>
+    <div class="car-wash-detail-form__item">
+      <h4>Список Боксов Технического Обслуживания</h4>
+      <template v-if="newData.carFixBoxes.length > 0">
+        <template v-for="(item, idx) of newData.carFixBoxes" :key="idx">
+          <input-float
+            v-model="carFixBoxes[idx].name"
+            :id="carFixBoxes[idx].id"
+            :label="`Название бокса № ${idx + 1}`"
+            :value="carFixBoxes[idx].name"
+          />
+          <p-button
+            class="button"
+            @click="emit('updateFixBox', carFixBoxes[idx])"
             >Обновить бокс</p-button
           >
         </template>
@@ -116,6 +135,8 @@ const newData = reactive({
   endTime: null,
   carWashBoxes: [],
   carWashPrice: [],
+  carFixBoxes: [],
+  carFixes: [],
 })
 const keyTranslationMap = {
   name: 'Название',
@@ -125,11 +146,13 @@ const keyTranslationMap = {
   phone: 'Номер телефона',
   description: 'Описание',
   carWashBoxes: 'Список боксов автомойки',
+  carFixBoxes: 'Список боксов технического обслуживаниыя',
   carWashPrice: 'Список цен на услуги',
   startTime: 'Время открытия',
   endTime: 'Время закрытия',
 }
 const carWashBoxes = ref([])
+const carFixBoxes = ref([])
 const button = reactive({
   error: '',
   loading: false,
@@ -147,7 +170,6 @@ const button = reactive({
     return false
   }),
   action: markRaw(async () => {
-    console.log(newData)
     newData.startTime =
       newData.startTime !== props.data.startTime
         ? normalizeTime(newData.startTime)
@@ -184,6 +206,7 @@ onBeforeMount(() => {
     ...existingKeys.map(key => ({ [key]: props.data[key] })),
   )
   carWashBoxes.value = [...newData.carWashBoxes]
+  carFixBoxes.value = [...newData.carFixBoxes]
 })
 </script>
 

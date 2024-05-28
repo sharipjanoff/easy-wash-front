@@ -37,6 +37,10 @@
         type="password"
       />
     </div>
+    <div v-if="!isManager">
+      Уже есть аккаунт?
+      <span><router-link to="/login">Войти!</router-link></span>
+    </div>
     <div class="registration-form__item">
       <p-button
         @click="button.action"

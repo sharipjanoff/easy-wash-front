@@ -4,7 +4,7 @@
       <h2>Данные о вашей резервации</h2>
     </div>
     <template v-for="(value, key) in normalizedReservationData" :key="key">
-      <div class="finish-step__item">
+      <div class="finish-step__item" v-if="value !== null">
         {{ keyTranslationMap[key] }} - {{ value }}
       </div>
     </template>
@@ -22,25 +22,29 @@ const props = defineProps({
   },
 })
 const normalizedReservationData = {
-  date: props.reservationData.normalizedDate,
+  date: props.reservationData?.normalizedDate,
   selectedCar:
-    props.reservationData.selectedCar.model +
+    props.reservationData?.selectedCar.model +
     ' ' +
-    props.reservationData.selectedCar.mark +
+    props.reservationData?.selectedCar.mark +
     ' ' +
-    props.reservationData.selectedCar.vrp,
-  washingCenterName: props.reservationData.washingCenter.name,
-  washingCenterAddress: props.reservationData.washingCenter.location,
-  washingCenterBox: props.reservationData.selectedCarBox.name,
-  washingCenterWorker: props.reservationData.selectedWorker.fio,
+    props.reservationData?.selectedCar.vrp,
+  washingCenterName: props.reservationData?.washingCenter.name,
+  washingCenterAddress: props.reservationData?.washingCenter.location,
+  washingCenterBox: props.reservationData?.selectedWashBox?.name || null,
+  washingCenterFixBox: props.reservationData?.selectedFixBox?.name || null,
+  washingCenterWorker: props.reservationData?.selectedWorker.fio,
+  selectedFix: props.reservationData?.selectedFix?.ruName || null,
 }
 const keyTranslationMap = {
   date: 'Дата и время',
   selectedCar: 'Выбранная вами машина',
   washingCenterName: 'Название автомойки',
   washingCenterAddress: 'Адрес автомойки',
-  washingCenterBox: 'Название бокса',
+  washingCenterBox: 'Название бокса мойки',
+  washingCenterFixBox: 'Название бокса тех обслуживания',
   washingCenterWorker: 'ФИО работника',
+  selectedFix: 'Выбранная услуга',
 }
 </script>
 

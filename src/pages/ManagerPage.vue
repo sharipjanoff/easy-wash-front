@@ -25,6 +25,7 @@
               carWashDetailDialog.updateWashingCenter($event)
             "
             @update-box="carWashDetailDialog.updateBox($event)"
+            @update-fix-box="carWashDetailDialog.updateFixBox($event)"
           />
         </Dialog>
       </div>
@@ -346,6 +347,30 @@ const carWashDetailDialog = reactive({
 
     if (updateBoxResponse?.data?.status === 2) {
       createBox.error = `Ошибка при обновлении данных - ${updateBoxResponse?.data?.message}`
+      createBox.loading = false
+      return
+    } else {
+      carWashList.value = (await carsService.getMyWashingCentersList())?.data
+      toast.add({
+        severity: 'success',
+        summary: 'Упешно!',
+        detail: `Бокс - ${data.name} был обновлен!`,
+        life: 3000,
+      })
+    }
+
+    carWashDetailDialog.loading = false
+  }),
+  updateFixBox: markRaw(async data => {
+    carWashDetailDialog.loading = true
+
+    const updateFixBoxResponse = await carsService.updateFixBox({
+      id: data.id,
+      name: data.name,
+    })
+
+    if (updateFixBoxResponse?.data?.status === 2) {
+      createBox.error = `Ошибка при обновлении данных - ${updateFixBoxResponse?.data?.message}`
       createBox.loading = false
       return
     } else {

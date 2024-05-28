@@ -5,20 +5,24 @@
       :data="currentServiceStore.data"
       :car-list="carList"
       :worker-list="workerList"
-      :price="currentCarPrice"
-      :car-box-list="carBoxList"
+      :wash-price="currentCarWashPrice"
+      :wash-box-list="washBoxList"
+      :fix-box-list="fixBoxList"
+      :fix-list="fixList"
       :reservation-data="reservationData"
+      :is-favorite="isFavorite"
       @action="action($event)"
       @rate="rate"
       @start-reservation="startReservation"
-      @reserve="reserve($event)"
-      @get-price="getPrice($event)"
+      @reserve-wash="reserve($event, 'wash')"
+      @reserve-fix="reserve($event, 'fix')"
+      @get-wash-price="getWashPrice($event)"
     />
   </div>
 </template>
 
 <script setup>
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import router from '@/plugins/router'
 import { carsService } from '@/plugins/axios/http/cars'
@@ -30,14 +34,16 @@ import FinishStep from '@/components/reservation/FinishStep.vue'
 
 const currentServiceStore = useCurrentServiceStore()
 const currentMapPositionStore = useCurrentMapPositionStore()
-console.log(currentServiceStore.data)
 const toast = useToast()
 const carList = ref(null)
-const carBoxList = ref(null)
+const washBoxList = ref(null)
+const fixBoxList = ref(null)
+const fixList = ref(null)
 const workerList = ref(null)
 const current = ref('information')
-const currentCarPrice = ref(null)
+const currentCarWashPrice = ref(null)
 const reservationData = ref(null)
+const isFavorite = ref(null)
 const steps = {
   information: InformationStep,
   reservation: ReservationStep,
@@ -55,7 +61,7 @@ const action = async type => {
     ]
     currentMapPositionStore.zoom = 25
     router.push('/map')
-  } else if (type === 'favorite') {
+  } else if (type === 'favorite-add') {
     const response = await carsService.addCarWashToFavorites({
       id: currentServiceStore.data.id,
     })
@@ -66,6 +72,7 @@ const action = async type => {
         detail: `${currentServiceStore.data.name} - не была добавлена в избранное!`,
         life: 3000,
       })
+      return
     }
     toast.add({
       severity: 'success',
@@ -73,6 +80,27 @@ const action = async type => {
       detail: `${currentServiceStore.data.name} - была добавлена в избранное!`,
       life: 3000,
     })
+    isFavorite.value = true
+  } else if (type === 'favorite-delete') {
+    const response = await carsService.deleteCarWashFromFavorites({
+      id: currentServiceStore.data.id,
+    })
+    if (response?.data?.status === 2 || !response) {
+      toast.add({
+        severity: 'error',
+        summary: 'Ошибка!',
+        detail: `${currentServiceStore.data.name} - не была удалена из избранных!`,
+        life: 3000,
+      })
+      return
+    }
+    toast.add({
+      severity: 'success',
+      summary: 'Упешно!',
+      detail: `${currentServiceStore.data.name} - была удалена из избранных!`,
+      life: 3000,
+    })
+    isFavorite.value = false
   }
 }
 const rate = () => {
@@ -86,7 +114,7 @@ const rate = () => {
 const startReservation = () => {
   current.value = 'reservation'
 }
-const reserve = async data => {
+const reserve = async (data, type) => {
   const normalizedDate = normalizeDate(data.date, data.selectedTime)
   reservationData.value = {
     ...data,
@@ -94,13 +122,21 @@ const reserve = async data => {
     washingCenter: currentServiceStore.data,
   }
   const payload = {
-    carWashPriceId: currentCarPrice.value.id,
-    carWashBoxId: data.selectedCarBox.id,
     carId: data.selectedCar.id,
     carWashWorkerId: data.selectedWorker.id,
     dateTime: normalizedDate,
   }
-  const response = await carsService.createOrder(payload)
+  let response
+  if (type === 'wash') {
+    payload.carWashPriceId = currentCarWashPrice.value.id
+    payload.carWashBoxId = data.selectedWashBox.id
+    response = await carsService.createOrder(payload)
+  }
+  if (type === 'fix') {
+    payload.carFixId = data.selectedFix.id
+    payload.carFixBoxId = data.selectedFixBox.id
+    response = await carsService.createFixOrder(payload)
+  }
   if (response?.data?.status === 2 || !response) {
     toast.add({
       severity: 'error',
@@ -119,10 +155,9 @@ const reserve = async data => {
   })
   current.value = 'finish'
 }
-
-const getPrice = async carBodyId => {
+const getWashPrice = async carBodyId => {
   const washingCenterId = currentServiceStore.data.id
-  currentCarPrice.value = (
+  currentCarWashPrice.value = (
     await carsService.getPriceById({
       washingCenterId,
       carBodyId,
@@ -146,8 +181,13 @@ onBeforeMount(async () => {
     router.push('/map')
   }
   carList.value = (await carsService.getMyCarList())?.data
-  carBoxList.value = (
-    await carsService.getBoxesByWashingCenterId({
+  washBoxList.value = (
+    await carsService.getWashBoxesByWashingCenterId({
+      id: currentServiceStore.data.id,
+    })
+  )?.data
+  fixBoxList.value = (
+    await carsService.getFixBoxesByWashingCenterId({
       id: currentServiceStore.data.id,
     })
   )?.data
@@ -156,6 +196,16 @@ onBeforeMount(async () => {
       id: currentServiceStore.data.id,
     })
   )?.data
+  fixList.value = (
+    await carsService.getFixList({
+      id: currentServiceStore.data.id,
+    })
+  )?.data
+
+  const favoritesList = (await carsService.getFavoriteCarWash())?.data
+  isFavorite.value = favoritesList.some(
+    item => item.id === currentServiceStore.data.id,
+  )
 })
 </script>
 

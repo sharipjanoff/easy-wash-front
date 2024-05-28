@@ -51,12 +51,25 @@
               </div>
             </div>
             <div class="actions">
-              <div class="action" @click="emit('action', 'favorite')">
-                <div class="action__icon">
-                  <i class="pi pi-heart" style="font-size: 2rem"></i>
+              <template v-if="isFavorite">
+                <div class="action" @click="emit('action', 'favorite-delete')">
+                  <div class="action__icon">
+                    <i
+                      class="pi pi-heart-fill"
+                      style="font-size: 2rem; color: lightsalmon"
+                    ></i>
+                  </div>
+                  <div class="actions__label">Удалить из избранного</div>
                 </div>
-                <div class="actions__label">Добавить в избранное</div>
-              </div>
+              </template>
+              <template v-else>
+                <div class="action" @click="emit('action', 'favorite-add')">
+                  <div class="action__icon">
+                    <i class="pi pi-heart" style="font-size: 2rem"></i>
+                  </div>
+                  <div class="actions__label">Добавить в избранное</div>
+                </div>
+              </template>
               <div class="action" @click="emit('action', 'map')">
                 <div class="action__icon">
                   <i class="pi pi-map" style="font-size: 2rem"></i>
@@ -92,24 +105,32 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue'
+import { carsService } from '@/plugins/axios/http/cars'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
 import PButton from 'primevue/button'
 import Rating from 'primevue/rating'
 import firstImage from '@/assets/images/carwash.webp'
 import secondImage from '@/assets/images/maintenance.webp'
-import { ref } from 'vue'
 
 const props = defineProps({
   data: {
     type: Object,
     required: true,
   },
+  isFavorite: {
+    type: [Boolean, null],
+    required: false,
+    default: () => {
+      return null
+    },
+  },
 })
 const emit = defineEmits(['action', 'rate', 'start-reservation'])
 
 const ratingValue = ref(null)
-const reviews = ref([])
+const reviews = ref(['shit'])
 </script>
 
 <style scoped lang="scss">

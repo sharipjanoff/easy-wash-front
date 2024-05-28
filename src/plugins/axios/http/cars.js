@@ -39,6 +39,15 @@ export const carsService = {
       return e.response ? e.response : null
     }
   },
+  deleteCarWashFromFavorites: async payload => {
+    try {
+      return await instance.delete(
+        `/cars/washing-center/unfavorite/${payload.id}`,
+      )
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
   getFavoriteCarWash: async () => {
     try {
       return await instance.get('/cars/washing-center/favorite')
@@ -88,9 +97,23 @@ export const carsService = {
       return e.response ? e.response : null
     }
   },
-  getBoxesByWashingCenterId: async payload => {
+  updateFixBox: async payload => {
+    try {
+      return await instance.put(`/cars/fix-box/edit/${payload.id}`, payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  getWashBoxesByWashingCenterId: async payload => {
     try {
       return await instance.get(`/cars/box/list/${payload.id}`, payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  getFixBoxesByWashingCenterId: async payload => {
+    try {
+      return await instance.get(`/cars/fix-box/list/${payload.id}`, payload)
     } catch (e) {
       return e.response ? e.response : null
     }
@@ -104,13 +127,19 @@ export const carsService = {
   },
   createFixPrice: async data => {
     const payload = {
-      type: 'a',
       ruName: data.service,
       washingCenterId: data.washingCenterId,
-      cost: data.cost,
+      cost: +data.cost,
     }
     try {
       return await instance.post('/cars/car-fix/create', payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  getFixList: async payload => {
+    try {
+      return await instance.get(`/cars/car-fix/list/${payload.id}`)
     } catch (e) {
       return e.response ? e.response : null
     }
@@ -166,9 +195,50 @@ export const carsService = {
       return e.response ? e.response : null
     }
   },
+  createFixOrder: async payload => {
+    try {
+      return await instance.post('cars/fix-order/create', payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  getOrderList: async payload => {
+    try {
+      return await instance.post(
+        `/cars/order/by-date-and-box/${payload.id}`,
+        payload.date,
+      )
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  getFixOrderList: async payload => {
+    try {
+      return await instance.post(
+        `/cars/fix-order/by-date-and-box/${payload.id}/`,
+        payload.date,
+      )
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
   getUserOrderList: async () => {
     try {
       return await instance.get('cars/order/my/')
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  getUserFixOrderList: async () => {
+    try {
+      return await instance.get('cars/fix-order/my/')
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  getWashingCenterOrderList: async payload => {
+    try {
+      return await instance.get('cars/order/my/', payload, { params: {} })
     } catch (e) {
       return e.response ? e.response : null
     }

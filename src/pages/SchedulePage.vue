@@ -37,7 +37,7 @@
               </div>
               <div class="detail-card__item">
                 <i class="pi pi-map-marker" style="font-size: 1rem"></i>
-                Автомойка - {{ data.washingCenter }}
+                Автомойка - {{ data.washingCenter ?? data.washingCenterId }}
               </div>
               <div class="detail-card__item">
                 <i class="pi pi-user" style="font-size: 1rem"></i>
@@ -48,8 +48,12 @@
                 Номер работника - {{ data.carWashWorker.phone }}
               </div>
               <div class="detail-card__item">
+                <i class="pi pi-wrench" style="font-size: 1rem"></i>
+                Услуга- {{ data?.carFix?.ruName ?? 'Мойка' }}
+              </div>
+              <div class="detail-card__item">
                 <i class="pi pi-money-bill" style="font-size: 1rem"></i>
-                Цена- {{ data.carWashPrice.cost }}
+                Цена- {{ data?.carWashPrice?.cost ?? data?.carFix?.cost }}
               </div>
               <!--              <div class="detail-card__item">-->
               <!--                <i class="pi pi-user" style="font-size: 1rem"></i>-->
@@ -71,6 +75,9 @@ import { carsService } from '@/plugins/axios/http/cars'
 const reservations = ref(null)
 onBeforeMount(async () => {
   reservations.value = (await carsService.getUserOrderList())?.data
+  reservations.value = reservations.value.concat(
+    (await carsService.getUserFixOrderList())?.data,
+  )
 })
 </script>
 
