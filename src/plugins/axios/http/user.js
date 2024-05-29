@@ -8,4 +8,13 @@ export const userService = {
       return e.response ? e.response : null
     }
   },
+  editUser: async payload => {
+    const id = payload.id
+    delete payload.id
+    try {
+      return await instance.put(`/users/${id}`, payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
 }

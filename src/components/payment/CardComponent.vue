@@ -2,11 +2,11 @@
   <div class="card-component">
     <div class="card">
       <div class="card-header">
-        <h2>Credit/Debit Card</h2>
+        <h2>Кредитная/Дебитовая Карта</h2>
       </div>
       <div class="card-body">
         <div class="card-number">
-          <label for="cardNumber">Card Number</label>
+          <label for="cardNumber">Номер Карты</label>
           <input
             :value="formattedCardNumber"
             @input="handleCardNumberInput"
@@ -17,17 +17,17 @@
           />
         </div>
         <div class="card-holder">
-          <label for="cardHolder">Card Holder</label>
+          <label for="cardHolder">Владелец Карты (латиницей)</label>
           <input
             v-model="cardData.cardHolder"
             id="cardHolder"
             type="text"
-            placeholder="Card Holder Name"
+            placeholder="Имя владельца"
           />
         </div>
         <div class="card-details">
           <div class="due-date">
-            <label for="dueDate">Due Date</label>
+            <label for="dueDate">Срок годности</label>
             <input
               :value="formattedDueDate"
               @input="handleDueDateInput"
@@ -38,7 +38,7 @@
             />
           </div>
           <div class="cvv">
-            <label for="cvv">CVV</label>
+            <label for="cvv">Трехнззначный CVV на обороте</label>
             <input
               v-model="cardData.cvv"
               id="cvv"

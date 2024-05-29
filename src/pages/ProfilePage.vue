@@ -64,7 +64,6 @@
         :breakpoints="{ '1280px': '75vw', '960px': '85vw', '640px': '95vw' }"
       >
         <change-password-form
-          :data="changePassword.data"
           :loading="changePassword.loading"
           :error="changePassword.error"
         />
@@ -92,7 +91,6 @@ import { useUserStore } from '@/stores/user'
 import { useToast } from 'primevue/usetoast'
 import Dialog from 'primevue/dialog'
 import VTooltip from 'primevue/tooltip'
-import ChangeEmailForm from '@/components/profile/ChangeEmailForm.vue'
 import ChangePasswordForm from '@/components/profile/ChangePasswordForm.vue'
 import ChangeUserData from '@/components/profile/ChangeUserDataForm.vue'
 import uploadImage from '@/assets/icons/add-profile.svg'
