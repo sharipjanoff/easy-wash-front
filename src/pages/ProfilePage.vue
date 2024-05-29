@@ -53,29 +53,9 @@
             style="font-size: 1.5rem; color: #989898"
           ></i>
         </div>
-        <div class="menu__item" @click="changEmailDialog.visible = true">
-          Изменить почту
-          <i
-            class="pi pi-angle-right"
-            style="font-size: 1.5rem; color: #989898"
-          ></i>
-        </div>
       </div>
     </div>
     <div class="dialogs">
-      <Dialog
-        v-model:visible="changEmailDialog.visible"
-        :modal="true"
-        header="Изменить почту"
-        style="width: 50vw"
-        :breakpoints="{ '1280px': '75vw', '960px': '85vw', '640px': '95vw' }"
-      >
-        <change-email-form
-          :data="changEmailDialog.data"
-          :loading="changEmailDialog.loading"
-          :error="changEmailDialog.error"
-        />
-      </Dialog>
       <Dialog
         v-model:visible="changePassword.visible"
         :modal="true"

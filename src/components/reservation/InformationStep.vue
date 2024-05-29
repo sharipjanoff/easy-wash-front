@@ -86,7 +86,14 @@
         </tab-panel>
         <tab-panel header="Отзывы">
           <div class="container">
-            <template v-if="reviews.length > 0"></template>
+            <template v-if="reviews.length > 0">
+              <h2>Оцените это место</h2>
+              <rating v-model="ratingValue" :cancel="false" />
+              <p-button @click="emit('rate')" label="Оставить отзыв"></p-button>
+              <template v-for="review in reviews">
+                {{ review }}
+              </template>
+            </template>
             <template v-else>
               <div class="review">
                 <h2>Оцените это место</h2>
@@ -130,7 +137,7 @@ const props = defineProps({
 const emit = defineEmits(['action', 'rate', 'start-reservation'])
 
 const ratingValue = ref(null)
-const reviews = ref(['shit'])
+const reviews = ref([])
 </script>
 
 <style scoped lang="scss">

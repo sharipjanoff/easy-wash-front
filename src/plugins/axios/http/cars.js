@@ -236,9 +236,23 @@ export const carsService = {
       return e.response ? e.response : null
     }
   },
-  getWashingCenterOrderList: async payload => {
+  createPayment: async payload => {
     try {
-      return await instance.get('cars/order/my/', payload, { params: {} })
+      return await instance.post('cars/payment/create', payload)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  deletePayment: async id => {
+    try {
+      return await instance.delete(`cars/payment/delete/${id}`)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  getMyPayments: async () => {
+    try {
+      return await instance.get('cars/payment/list')
     } catch (e) {
       return e.response ? e.response : null
     }
