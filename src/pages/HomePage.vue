@@ -30,8 +30,8 @@
     <div class="home-page__item">
       <h2>Автомойки</h2>
       <carousel
-        v-if="carWashes"
-        :value="carWashes"
+        v-if="filteredCarWashes.length"
+        :value="filteredCarWashes"
         :num-visible="3"
         :num-scroll="3"
         :responsive-options="responsiveOptions"
@@ -55,40 +55,13 @@
           </div>
         </template>
       </carousel>
+      <div v-else>Совпадений не найдено...</div>
     </div>
-    <!--    <div class="home-page__item">-->
-    <!--      <h2>СТО</h2>-->
-    <!--      <carousel-->
-    <!--        :value="items2"-->
-    <!--        :num-visible="3"-->
-    <!--        :num-scroll="3"-->
-    <!--        :responsive-options="responsiveOptions"-->
-    <!--      >-->
-    <!--        <template #item="slotProps">-->
-    <!--          <div class="carousel-item" @click="handleReservation(slotProps.data)">-->
-    <!--            <img-->
-    <!--              class="carousel-item__image"-->
-    <!--              :src="slotProps.data.image"-->
-    <!--              alt="Carwash Image"-->
-    <!--            />-->
-    <!--            <div class="carousel-item__name">-->
-    <!--              {{ slotProps.data.name }}-->
-    <!--            </div>-->
-    <!--            <div class="carousel-item__address">-->
-    <!--              {{ slotProps.data.address }}-->
-    <!--            </div>-->
-    <!--            <div class="carousel-item__phone">-->
-    <!--              {{ slotProps.data.phone }}-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </template>-->
-    <!--      </carousel>-->
-    <!--    </div>-->
   </div>
 </template>
 
 <script setup>
-import { onBeforeMount, ref, reactive } from 'vue'
+import { onBeforeMount, ref, computed } from 'vue'
 import router from '../plugins/router'
 import PButton from 'primevue/button'
 import InputText from 'primevue/inputtext'
@@ -126,56 +99,29 @@ const responsiveOptions = ref([
   },
 ])
 const carWashes = ref(null)
-const items2 = [
-  {
-    image: maintenance,
-    name: 'СТО 1',
-    detail: 'СТО detail',
-    address: 'Somethin street',
-    number: '+77472281999',
-    coordinates: [43.25654, 76.92848],
-    serviceType: 'СТО',
-    workTime: '9:00 - 21:00',
-  },
-  {
-    image: maintenance,
-    name: 'СТО 2',
-    detail: 'СТО detail',
-    address: 'Somethin street',
-    number: '+77472281999',
-    coordinates: [43.25654, 76.92848],
-    serviceType: 'СТО',
-    workTime: '9:00 - 21:00',
-  },
-  {
-    image: maintenance,
-    name: 'СТО 3',
-    detail: 'СТО detail',
-    address: 'Somethin street',
-    number: '+77472281999',
-    coordinates: [43.25654, 76.92848],
-    serviceType: 'СТО',
-    workTime: '9:00 - 21:00',
-  },
-  {
-    image: maintenance,
-    name: 'СТО 4',
-    detail: 'СТО detail',
-    address: 'Somethin street',
-    number: '+77472281999',
-    coordinates: [43.25654, 76.92848],
-    serviceType: 'СТО',
-    workTime: '9:00 - 21:00',
-  },
-]
 
 const handleReservation = info => {
   currentService.data = info
   router.push('/reservation')
 }
+
 const handleSearch = () => {
-  console.log(searchQuery.value)
+  console.log('Search triggered:', searchQuery.value)
 }
+
+const filteredCarWashes = computed(() => {
+  if (!searchQuery.value) {
+    return carWashes.value
+  }
+  return carWashes.value.filter(
+    carWash =>
+      carWash.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      carWash.location
+        .toLowerCase()
+        .includes(searchQuery.value.toLowerCase()) ||
+      carWash.phone.includes(searchQuery.value),
+  )
+})
 
 onBeforeMount(async () => {
   carWashes.value = (await carsService.getWashingCentersList())?.data
@@ -278,12 +224,10 @@ onBeforeMount(async () => {
   }
 }
 
-// Use this outside of .home-page to apply when the condition is met
 .search-input-container {
   display: block !important; // Override the display none when the container should be visible
 }
 
-// Adjust for when the search is active
 .home-page .page-header.page-header_column .search-input-container {
   opacity: 1;
   transform: translateY(0);
