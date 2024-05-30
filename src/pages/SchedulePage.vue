@@ -74,10 +74,13 @@ import { carsService } from '@/plugins/axios/http/cars'
 
 const reservations = ref(null)
 onBeforeMount(async () => {
-  reservations.value = (await carsService.getUserOrderList())?.data
-  reservations.value = reservations.value.concat(
-    (await carsService.getUserFixOrderList())?.data,
+  reservations.value = (await carsService.getUserOrderList())?.data.filter(
+    order => order.expired === false,
   )
+  const fixOrders = (await carsService.getUserFixOrderList())?.data.filter(
+    fixOrder => fixOrder.expired === false,
+  )
+  reservations.value = reservations.value.concat(fixOrders)
 })
 </script>
 

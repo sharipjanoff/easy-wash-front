@@ -3,8 +3,15 @@
     <div class="information-step__item">
       <h1>{{ data.name }}</h1>
       <div class="image-container">
-        <img :src="firstImage" alt="Image 1" />
-        <img :src="secondImage" alt="Image 2" />
+        <template v-if="data.images">
+          <template v-for="(image, key) in data.images" :key="key">
+            <img v-if="image !== null" :src="image" :alt="`image${key}`" />
+          </template>
+        </template>
+        <template v-else>
+          <img :src="firstImage" alt="Image 1" />
+          <img :src="secondImage" alt="Image 2" />
+        </template>
       </div>
       <tab-view>
         <tab-panel header="Обзор">

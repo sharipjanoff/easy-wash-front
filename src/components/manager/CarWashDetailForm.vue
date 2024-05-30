@@ -29,6 +29,16 @@
         </div>
       </template>
     </template>
+    <div class="car-wash-detail-form__item images-input-container">
+      <p>Изображения</p>
+      <input-float
+        @change.prevent="handleInput"
+        id="images"
+        type="file"
+        multiple
+        accept="image/*"
+      />
+    </div>
     <div class="car-wash-detail-form__item">
       <p-button
         class="button"
@@ -85,6 +95,7 @@
 import { computed, markRaw, onBeforeMount, reactive, ref } from 'vue'
 import InputFloat from '@/components/common/InputFloat.vue'
 import PButton from 'primevue/button'
+import { fileService } from '../../plugins/axios/http/file'
 
 const props = defineProps({
   data: {
@@ -197,6 +208,19 @@ const normalizeTime = strDate => {
   return `${hours}:${minutes}:00`
 }
 
+const handleInput = async event => {
+  event.stopPropagation()
+  const files = event.target.files
+  const ids = []
+  if (!files.length) return
+
+  for (let i = 0; i < files.length; i++) {
+    const id = (await fileService.uploadImage(files[i]))?.data.value
+    ids.push(id)
+  }
+  newData.headings = ids
+}
+
 onBeforeMount(() => {
   const existingKeys = Object.keys(newData).filter(key =>
     props.data.hasOwnProperty(key),
@@ -229,6 +253,14 @@ onBeforeMount(() => {
     gap: 21px;
     .error {
       color: #a20000;
+    }
+  }
+  .images-input-container {
+    margin-top: -15px;
+    gap: 0;
+    align-items: flex-start;
+    p {
+      margin-left: 10px;
     }
   }
 }

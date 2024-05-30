@@ -46,6 +46,15 @@
       />
     </div>
     <div class="create-form__item">
+      <input-float
+        @change.prevent="handleInput"
+        id="images"
+        type="file"
+        multiple
+        accept="image/*"
+      />
+    </div>
+    <div class="create-form__item">
       <p-button
         @click="button.action"
         :loading="button.loading"
@@ -61,9 +70,10 @@
 </template>
 
 <script setup>
-import { computed, markRaw, reactive } from 'vue'
+import { computed, markRaw, reactive, ref } from 'vue'
 import InputFloat from '@/components/common/InputFloat.vue'
 import PButton from 'primevue/button'
+import { fileService } from '@/plugins/axios/http/file'
 
 const props = defineProps({
   loading: {
@@ -131,6 +141,19 @@ const normalizeTime = strDate => {
   const hours = ('0' + date.getHours()).slice(-2) // Pad with leading zero if necessary
   const minutes = ('0' + date.getMinutes()).slice(-2) // Pad with leading zero if necessary
   return `${hours}:${minutes}:00`
+}
+
+const handleInput = async event => {
+  event.stopPropagation()
+  const files = event.target.files
+  const ids = []
+  if (!files.length) return
+
+  for (let i = 0; i < files.length; i++) {
+    const id = (await fileService.uploadImage(files[i]))?.data.value
+    ids.push(id)
+  }
+  carWashData.headings = ids
 }
 </script>
 

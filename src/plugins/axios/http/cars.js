@@ -257,4 +257,14 @@ export const carsService = {
       return e.response ? e.response : null
     }
   },
+  updateHeading: async payload => {
+    try {
+      return await instance.put(
+        `cars/washing-center/avtar/${payload.id}`,
+        payload.images,
+      )
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
 }

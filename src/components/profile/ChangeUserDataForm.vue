@@ -63,11 +63,11 @@ const button = reactive({
       toast.add({
         severity: 'success',
         summary: 'Упешно!',
-        detail: 'Пароль был изменен!',
+        detail: 'Данные были изменены!',
         life: 3000,
       })
     } else {
-      button.error = `Ошибка! Пароль не был изменен - ${changeUserDataResponse?.data?.message}`
+      button.error = `Ошибка! Данные не были изменены - ${changeUserDataResponse?.data?.message}`
     }
     button.loading = false
   }),

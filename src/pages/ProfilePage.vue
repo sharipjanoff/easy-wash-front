@@ -86,7 +86,7 @@
 </template>
 
 <script setup>
-import { markRaw, reactive, ref } from 'vue'
+import { markRaw, onBeforeMount, reactive, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useToast } from 'primevue/usetoast'
 import Dialog from 'primevue/dialog'
@@ -94,6 +94,8 @@ import VTooltip from 'primevue/tooltip'
 import ChangePasswordForm from '@/components/profile/ChangePasswordForm.vue'
 import ChangeUserData from '@/components/profile/ChangeUserDataForm.vue'
 import uploadImage from '@/assets/icons/add-profile.svg'
+import { fileService } from '../plugins/axios/http/file'
+import { userService } from '../plugins/axios/http/user'
 
 const toast = useToast()
 const userStore = useUserStore()
@@ -121,11 +123,30 @@ const changeUserDataForm = reactive({
 
 const upload = async evt => {
   const file = evt.target.files[0]
+
   if (file && file.type.startsWith('image/')) {
     const reader = new FileReader()
 
     reader.onload = e => {
       userImage.value = e.target.result
+    }
+
+    const uploadResponse = await fileService.uploadImage(file)
+    if (uploadResponse?.data?.status === 1) {
+      await userService.updateAvatar(uploadResponse.data.value)
+      toast.add({
+        severity: 'success',
+        summary: 'Упешно!',
+        detail: 'Изображение было загружено!',
+        life: 3000,
+      })
+    } else {
+      toast.add({
+        severity: 'error',
+        summary: 'Провал!',
+        detail: 'Изображение не было загружено!',
+        life: 3000,
+      })
     }
 
     reader.readAsDataURL(file)
@@ -134,6 +155,30 @@ const upload = async evt => {
 const handleClick = () => {
   hiddenFileInput.value.click()
 }
+
+function arrayBufferToBase64(buffer) {
+  let binary = ''
+  const bytes = new Uint8Array(buffer)
+  const len = bytes.byteLength
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i])
+  }
+  return window.btoa(binary)
+}
+
+function convertToImageSrc(buffer) {
+  const base64String = arrayBufferToBase64(buffer)
+  const mimeType = 'image/jpeg' // Change to the correct MIME type if needed
+  return `data:${mimeType};base64,${base64String}`
+}
+
+onBeforeMount(async () => {
+  if (userStore.data.avatar) {
+    const imageResponse = await fileService.getImage(userStore.data.avatar)
+    const imageData = imageResponse.data
+    userImage.value = convertToImageSrc(imageData)
+  }
+})
 </script>
 
 <style scoped lang="scss">

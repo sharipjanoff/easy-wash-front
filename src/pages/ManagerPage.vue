@@ -128,7 +128,7 @@ const createCarWash = reactive({
     )
 
     if (createResponse?.data?.status === 2) {
-      createCarWash.error = `Ошибка при регистрации - ${createResponse?.data?.message}`
+      createCarWash.error = `Ошибка при создании - ${createResponse?.data?.message}`
       createCarWash.loading = false
       return
     } else {

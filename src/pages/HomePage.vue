@@ -28,7 +28,7 @@
       </p-button>
     </div>
     <div class="home-page__item">
-      <h2>Автомойки</h2>
+      <h2>Станции обслуживания</h2>
       <carousel
         v-if="filteredCarWashes.length"
         :value="filteredCarWashes"
@@ -71,6 +71,7 @@ import maintenance from '@/assets/images/maintenance.webp'
 import { useCurrentServiceStore } from '@/stores/currentService'
 import { useUserStore } from '@/stores/user'
 import { carsService } from '@/plugins/axios/http/cars'
+import { fileService } from '../plugins/axios/http/file'
 
 const currentService = useCurrentServiceStore()
 const userStore = useUserStore()
@@ -123,8 +124,42 @@ const filteredCarWashes = computed(() => {
   )
 })
 
+function arrayBufferToBase64(buffer) {
+  let binary = ''
+  const bytes = new Uint8Array(buffer)
+  const len = bytes.byteLength
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i])
+  }
+  return window.btoa(binary)
+}
+
+function convertToImageSrc(buffer) {
+  const base64String = arrayBufferToBase64(buffer)
+  const mimeType = 'image/jpeg' // Change to the correct MIME type if needed
+  return `data:${mimeType};base64,${base64String}`
+}
+
 onBeforeMount(async () => {
   carWashes.value = (await carsService.getWashingCentersList())?.data
+
+  for (const carWash of carWashes.value) {
+    if (carWash.headings && carWash.headings.length > 0) {
+      carWash.images = []
+
+      for (const headingId of carWash.headings) {
+        try {
+          const imageResponse = await fileService.getImage(headingId)
+          const imageData = imageResponse.data
+          const imageSrc = convertToImageSrc(imageData)
+          carWash.images.push(imageSrc)
+        } catch (error) {
+          console.error(`Error fetching image for ID ${headingId}:`, error)
+        }
+      }
+      carWash.image = carWash.images[0]
+    }
+  }
 })
 </script>
 
