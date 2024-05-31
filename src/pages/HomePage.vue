@@ -30,7 +30,7 @@
     <div class="home-page__item">
       <h2>Станции обслуживания</h2>
       <carousel
-        v-if="filteredCarWashes.length"
+        v-if="filteredCarWashes"
         :value="filteredCarWashes"
         :num-visible="3"
         :num-scroll="3"

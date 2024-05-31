@@ -168,8 +168,9 @@ const getWashPrice = async carBodyId => {
 function normalizeDate(dateString, timeString) {
   const date =
     dateString instanceof Date
-      ? dateString.toISOString().split('T')[0]
+      ? dateString.toLocaleDateString('en-CA')
       : dateString
+
   const startTime = timeString.split(' - ')[0].replace(' ', '') + ':00'
   const normalizedDateTime = `${date} ${startTime}`
   return normalizedDateTime

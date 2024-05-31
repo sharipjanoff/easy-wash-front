@@ -212,11 +212,61 @@ export const carsService = {
       return e.response ? e.response : null
     }
   },
+  getOrderListFull: async payload => {
+    try {
+      return await instance.post(
+        `/cars/order/by-date-and-center/${payload.id}`,
+        payload.date,
+      )
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
   getFixOrderList: async payload => {
     try {
       return await instance.post(
         `/cars/fix-order/by-date-and-box/${payload.id}/`,
         payload.date,
+      )
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  getFixOrderListFull: async payload => {
+    try {
+      return await instance.post(
+        `/cars/fix-order/by-date-and-center/${payload.id}`,
+        payload.date,
+      )
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  updateFixOrderStatus: async payload => {
+    try {
+      return await instance.put(
+        `cars/fix-order/edit/status/${payload.id}`,
+        payload.status,
+        {
+          headers: {
+            'Content-Type': '',
+          },
+        },
+      )
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  updateOrderStatus: async payload => {
+    try {
+      return await instance.put(
+        `cars/order/edit/status/${payload.id}`,
+        payload.status,
+        {
+          headers: {
+            'Content-Type': '',
+          },
+        },
       )
     } catch (e) {
       return e.response ? e.response : null

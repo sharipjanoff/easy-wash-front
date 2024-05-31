@@ -45,6 +45,7 @@ const emit = defineEmits(['row-click'])
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 25px;
   gap: 20px;
   width: 100%;
 
