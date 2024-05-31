@@ -155,7 +155,7 @@ const ratingData = reactive({
 })
 const reviews = ref(null)
 
-onBeforeMount(async () => {
+async function getReviewList() {
   const reviewsResponse = (await carsService.getReviews({ id: props.data.id }))
     ?.data
   for (let i = 0; i < reviewsResponse.length; i++) {
@@ -165,6 +165,10 @@ onBeforeMount(async () => {
     reviewsResponse[i].userFio = userFio
   }
   reviews.value = reviewsResponse
+}
+
+onBeforeMount(async () => {
+  await getReviewList()
 })
 </script>
 

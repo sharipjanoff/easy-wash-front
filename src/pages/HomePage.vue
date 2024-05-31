@@ -250,6 +250,7 @@ onBeforeMount(async () => {
       width: 150px;
       height: 150px;
       border-radius: 5%;
+      object-fit: cover;
       img {
         width: 100%;
         height: 100%;
