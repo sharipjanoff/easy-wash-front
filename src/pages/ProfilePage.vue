@@ -133,6 +133,7 @@ const upload = async evt => {
 
     const uploadResponse = await fileService.uploadImage(file)
     if (uploadResponse?.data?.status === 1) {
+      userStore.data.avatar = uploadResponse.data.value
       await userService.updateAvatar(uploadResponse.data.value)
       toast.add({
         severity: 'success',

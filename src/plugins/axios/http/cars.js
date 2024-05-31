@@ -244,30 +244,18 @@ export const carsService = {
   },
   updateFixOrderStatus: async payload => {
     try {
-      return await instance.put(
-        `cars/fix-order/edit/status/${payload.id}`,
-        payload.status,
-        {
-          headers: {
-            'Content-Type': '',
-          },
-        },
-      )
+      return await instance.put(`cars/fix-order/edit/status/${payload.id}`, {
+        status: payload.status,
+      })
     } catch (e) {
       return e.response ? e.response : null
     }
   },
   updateOrderStatus: async payload => {
     try {
-      return await instance.put(
-        `cars/order/edit/status/${payload.id}`,
-        payload.status,
-        {
-          headers: {
-            'Content-Type': '',
-          },
-        },
-      )
+      return await instance.put(`cars/order/edit/status/${payload.id}`, {
+        status: payload.status,
+      })
     } catch (e) {
       return e.response ? e.response : null
     }
@@ -313,6 +301,23 @@ export const carsService = {
         `cars/washing-center/avtar/${payload.id}`,
         payload.images,
       )
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  createReview: async payload => {
+    try {
+      return await instance.post(`cars/washing-center/review/${payload.id}`, {
+        rating: +payload.rating,
+        review: payload.commentary,
+      })
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
+  getReviews: async payload => {
+    try {
+      return await instance.get(`cars/washing-center/review/${payload.id}`)
     } catch (e) {
       return e.response ? e.response : null
     }

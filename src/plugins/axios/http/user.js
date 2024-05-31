@@ -22,4 +22,11 @@ export const userService = {
       return e.response ? e.response : null
     }
   },
+  getUserById: async id => {
+    try {
+      return await instance.get(`users/${id}`)
+    } catch (e) {
+      return e.response ? e.response : null
+    }
+  },
 }

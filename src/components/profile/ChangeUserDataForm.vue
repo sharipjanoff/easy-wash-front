@@ -56,6 +56,7 @@ const button = reactive({
     button.loading = true
     button.error = ''
     const changeUserDataResponse = await userService.editUser({
+      ...userStore.data,
       ...userData,
       id: userStore.data.id,
     })
@@ -66,6 +67,7 @@ const button = reactive({
         detail: 'Данные были изменены!',
         life: 3000,
       })
+      userStore.data = { ...userStore.data, ...userData }
     } else {
       button.error = `Ошибка! Данные не были изменены - ${changeUserDataResponse?.data?.message}`
     }

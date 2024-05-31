@@ -103,13 +103,26 @@ const action = async type => {
     isFavorite.value = false
   }
 }
-const rate = () => {
-  toast.add({
-    severity: 'success',
-    summary: 'Упешно!',
-    detail: 'Спасибо за вашу оценку!',
-    life: 3000,
+const rate = async data => {
+  const reviewResponse = await carsService.createReview({
+    id: currentServiceStore.data.id,
+    ...data,
   })
+  if (reviewResponse && reviewResponse?.data?.status === 1) {
+    toast.add({
+      severity: 'success',
+      summary: 'Упешно!',
+      detail: 'Спасибо за вашу оценку!',
+      life: 3000,
+    })
+  } else {
+    toast.add({
+      severity: 'error',
+      summary: 'Ошибка!',
+      detail: `${reviewResponse.data?.message || 'Вы уже оставляли отзыв'}`,
+      life: 3000,
+    })
+  }
 }
 const startReservation = () => {
   current.value = 'reservation'

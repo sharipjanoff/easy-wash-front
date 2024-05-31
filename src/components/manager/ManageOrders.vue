@@ -124,15 +124,14 @@ const orderListDialog = reactive({
     if (data?.carFix) {
       await carsService.updateFixOrderStatus({
         id: data.id,
-        status: JSON.stringify(selectedStatus.value.status),
+        status: selectedStatus.value.status,
       })
     } else {
       await carsService.updateOrderStatus({
         id: data.id,
-        status: JSON.stringify(selectedStatus.value.status),
+        status: selectedStatus.value.status,
       })
     }
-    console.log(data)
   }),
 })
 const statusOptions = [

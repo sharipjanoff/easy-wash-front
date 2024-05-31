@@ -93,24 +93,28 @@
         </tab-panel>
         <tab-panel header="Отзывы">
           <div class="container">
-            <template v-if="reviews.length > 0">
+            <div class="review">
               <h2>Оцените это место</h2>
-              <rating v-model="ratingValue" :cancel="false" />
-              <p-button @click="emit('rate')" label="Оставить отзыв"></p-button>
-              <template v-for="review in reviews">
-                {{ review }}
+              <rating v-model="ratingData.rating" :stars="10" :cancel="false" />
+              <input-float
+                v-model="ratingData.commentary"
+                id="review"
+                label="Комментарий"
+              />
+              <p-button
+                @click="emit('rate', ratingData)"
+                label="Оставить отзыв"
+              ></p-button>
+            </div>
+            <div v-if="reviews" class="review-list">
+              <template v-for="(review, idx) in reviews" :key="idx">
+                <div class="review-list__item">
+                  <div>№ {{ idx + 1 }} - {{ review.userFio }}</div>
+                  <div>Оценка: {{ review.rating }}/10</div>
+                  <div>Комментарий: {{ review.review }}</div>
+                </div>
               </template>
-            </template>
-            <template v-else>
-              <div class="review">
-                <h2>Оцените это место</h2>
-                <rating v-model="ratingValue" :cancel="false" />
-                <p-button
-                  @click="emit('rate')"
-                  label="Оставить отзыв"
-                ></p-button>
-              </div>
-            </template>
+            </div>
           </div>
         </tab-panel>
       </tab-view>
@@ -119,7 +123,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
 import { carsService } from '@/plugins/axios/http/cars'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
@@ -127,6 +131,8 @@ import PButton from 'primevue/button'
 import Rating from 'primevue/rating'
 import firstImage from '@/assets/images/carwash.webp'
 import secondImage from '@/assets/images/maintenance.webp'
+import InputFloat from '@/components/common/InputFloat.vue'
+import { userService } from '../../plugins/axios/http/user'
 
 const props = defineProps({
   data: {
@@ -143,8 +149,23 @@ const props = defineProps({
 })
 const emit = defineEmits(['action', 'rate', 'start-reservation'])
 
-const ratingValue = ref(null)
-const reviews = ref([])
+const ratingData = reactive({
+  rating: null,
+  commentary: null,
+})
+const reviews = ref(null)
+
+onBeforeMount(async () => {
+  const reviewsResponse = (await carsService.getReviews({ id: props.data.id }))
+    ?.data
+  for (let i = 0; i < reviewsResponse.length; i++) {
+    const userId = reviewsResponse[i].userId
+    const userInfo = (await userService.getUserById(userId))?.data
+    const userFio = userInfo.fio
+    reviewsResponse[i].userFio = userFio
+  }
+  reviews.value = reviewsResponse
+})
 </script>
 
 <style scoped lang="scss">
@@ -229,8 +250,23 @@ const reviews = ref([])
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 10px;
+        gap: 20px;
         color: #000;
+      }
+      .review-list {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 20px;
+        color: #000;
+
+        &__item {
+          width: 100%;
+          padding-bottom: 10px;
+          border-bottom: 1px solid var(--primary-color);
+        }
       }
       .button {
         align-self: center;
