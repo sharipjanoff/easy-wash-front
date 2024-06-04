@@ -3,9 +3,14 @@
     <div class="information-step__item">
       <h1>{{ data.name }}</h1>
       <div class="image-container">
-        <template v-if="data.images">
-          <template v-for="(image, key) in data.images" :key="key">
-            <img v-if="image !== null" :src="image" :alt="`image${key}`" />
+        <template v-if="data.images.length > 0">
+          <template v-for="(image, key) in data.images">
+            <template v-if="image !== null" :key="key">
+              <img :src="image" :alt="`image${key}`" />
+            </template>
+            <template v-else>
+              <img :src="firstImage" alt="Image 1" />
+            </template>
           </template>
         </template>
         <template v-else>
