@@ -196,6 +196,7 @@ onBeforeMount(async () => {
       justify-content: center;
       align-items: center;
       gap: 10px;
+      width: 100%;
 
       img {
         max-height: 200px;
