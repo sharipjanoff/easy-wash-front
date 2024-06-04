@@ -190,7 +190,7 @@ function normalizeDate(dateString, timeString) {
 }
 
 onBeforeMount(async () => {
-  const isStoreEmpty = Object.keys(currentServiceStore.data).length === 0
+  const isStoreEmpty = Object.keys(currentServiceStore.data)?.length === 0
   if (isStoreEmpty) {
     router.push('/map')
   }

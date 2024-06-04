@@ -11,13 +11,13 @@
           <div>Номер телефона: {{ item.phone }}</div>
           <div>Время работы: {{ item.startTime }} - {{ item.endTime }}</div>
           <panel
-            v-if="item.carWashPrice.length > 0"
+            v-if="item?.carWashPrice.length > 0"
             header="Стоимость услуг автомойки"
             toggleable
             :collapsed="true"
           >
             <template
-              v-for="carWashItem in item.carWashPrice"
+              v-for="carWashItem in item?.carWashPrice"
               :key="carWashItem.id"
             >
               <div>
@@ -26,7 +26,7 @@
             </template>
           </panel>
           <panel
-            v-if="item.carFixes.length > 0"
+            v-if="item?.carFixes.length > 0"
             header="Стоимость услуг СТО"
             toggleable
             :collapsed="true"
