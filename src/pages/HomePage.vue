@@ -148,6 +148,7 @@ onBeforeMount(async () => {
       carWash.images = []
 
       for (const headingId of carWash.headings) {
+        if (headingId === null) return
         try {
           const imageResponse = await fileService.getImage(headingId)
           const imageData = imageResponse.data
