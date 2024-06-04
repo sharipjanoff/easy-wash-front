@@ -200,7 +200,7 @@ onBeforeMount(async () => {
 
       img {
         max-height: 200px;
-        width: 50%;
+        max-width: 50%;
         border-radius: 20px;
       }
     }
