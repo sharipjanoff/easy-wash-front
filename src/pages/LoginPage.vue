@@ -81,7 +81,9 @@ const button = reactive({
   }),
 })
 
-onBeforeMount(() => {})
+onBeforeMount(() => {
+  delete instance.defaults.headers.common.Authorization
+})
 </script>
 
 <style scoped lang="scss">

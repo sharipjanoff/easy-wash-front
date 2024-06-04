@@ -19,12 +19,13 @@
 </template>
 
 <script setup>
-import { reactive, ref, computed, markRaw } from 'vue'
+import { reactive, ref, computed, markRaw, onBeforeMount } from 'vue'
 import { authService } from '@/plugins/axios/http/auth'
 import RegistrationForm from '@/components/common/RegistrationForm.vue'
 import OtpForm from '@/components/common/OtpForm.vue'
 import { useToast } from 'primevue/usetoast'
 import router from '@/plugins/router'
+import instance from '../plugins/axios'
 
 const registration = reactive({
   userData: {
@@ -87,6 +88,10 @@ const sendOtp = async data => {
   }
   otp.loading = false
 }
+
+onBeforeMount(() => {
+  delete instance.defaults.headers.common.Authorization
+})
 </script>
 
 <style scoped lang="scss">
